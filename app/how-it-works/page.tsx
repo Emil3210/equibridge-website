@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AudienceTabs from "@/components/AudienceTabs";
+import Explainer from "@/components/Explainer";
 
 export const metadata: Metadata = {
   title: "How It Works",
@@ -23,7 +24,14 @@ export default async function HowItWorksPage({
           <p className="lead">Choose your view. Brokers and lenders manage the file; homeowners see what to expect at each step.</p>
         </div>
       </div>
-      <div className="container stack" style={{ paddingTop: 32 }}>
+      <div className="container stack" style={{ gap: 18, paddingTop: 56 }}>
+        <div className="stack" style={{ gap: 8 }}>
+          <p className="eyebrow">Watch · 80 seconds</p>
+          <h2 className="h2">How a bridge turns an “almost” file into a closed loan</h2>
+        </div>
+        <Explainer />
+      </div>
+      <div className="container stack" style={{ paddingTop: 48 }}>
         <AudienceTabs initial={initial} />
       </div>
     </section>

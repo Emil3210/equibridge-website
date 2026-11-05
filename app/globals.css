@@ -127,7 +127,23 @@ details.faq p { margin-top: 12px; color: var(--body); }
 .glance td:last-child { text-align: right; font-weight: 600; }
 .glance tr:last-child td { border-bottom: none; }
 
+/* Explainer animation (components/Explainer.tsx) */
+.xp-stage { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 20px; border: 1px solid var(--line); background: var(--bg); }
+.xp-stage:fullscreen { aspect-ratio: auto; width: 100vw; height: 100vh; border: none; border-radius: 0; }
+.xp-record { position: fixed; inset: 0; z-index: 100; width: 100vw; height: 100vh; aspect-ratio: auto; border: none; border-radius: 0; }
+.xp-canvas { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transform-origin: 0 0; font-family: var(--font-body); color: var(--navy); line-height: 1.4; }
+.xp-canvas p { margin: 0; }
+.xp-cap-in { position: absolute; left: 0; top: 640px; width: 1280px; height: 80px; display: flex; align-items: center; justify-content: center; padding: 0 80px; box-sizing: border-box; background: var(--teal-deep); color: #fff; font-size: 25px; font-weight: 500; text-align: center; }
+.xp-cap-out { display: none; }
+.xp-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 16px; }
+.xp-controls input[type="range"] { flex: 1 1 180px; accent-color: var(--teal-deep); min-height: 44px; }
+.xp-chapters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.xp-chapter { min-height: 40px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--teal-deep); font-family: var(--font-heading); font-size: 14px; font-weight: 700; cursor: pointer; }
+.xp-chapter[aria-current="step"] { background: var(--teal-deep); border-color: var(--teal-deep); color: #fff; }
+
 @media (max-width: 720px) {
+  .xp-cap-in { display: none; }
+  .xp-cap-out { display: block; margin-top: 12px; padding: 12px 16px; min-height: 4.6em; border-radius: 12px; background: var(--teal-deep); color: #fff; font-size: 16px; line-height: 1.45; }
   .section { padding-top: 64px; padding-bottom: 64px; }
   .hide-sm { display: none; }
   .main-nav { gap: 18px; }
