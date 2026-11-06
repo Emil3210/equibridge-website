@@ -42,7 +42,7 @@ export default function Header() {
           <Link href="/portal" className="btn btn-outline btn-sm hide-sm">
             Partner Login
           </Link>
-          <Link href="/portal" className="btn btn-primary btn-sm">
+          <Link href="/submit-scenario" className="btn btn-primary btn-sm">
             Submit a Scenario
           </Link>
         </div>

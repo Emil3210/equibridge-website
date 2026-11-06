@@ -33,7 +33,7 @@ export default function HomePage() {
               strong payment history can move to a better permanent loan.
             </p>
             <div className="row" style={{ gap: 14, paddingTop: 8 }}>
-              <Link href="/portal" className="btn btn-primary">
+              <Link href="/submit-scenario" className="btn btn-primary">
                 Submit a Scenario
               </Link>
               <Link href="/how-it-works" className="btn btn-outline">
@@ -207,7 +207,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="row" style={{ gap: 14 }}>
-            <Link href="/portal" className="btn btn-primary">
+            <Link href="/submit-scenario" className="btn btn-primary">
               Submit a Scenario
             </Link>
             <Link href="/about#contact" className="btn btn-outline">

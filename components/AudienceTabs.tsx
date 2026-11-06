@@ -106,7 +106,7 @@ export default function AudienceTabs({ initial }: { initial: View }) {
                 <li>Status updates at [2] and [6] weeks, with borrower consent</li>
                 <li>Compensation within federal LO comp rules</li>
               </ul>
-              <Link href="/portal" className="btn btn-primary" style={{ alignSelf: "flex-start" }}>
+              <Link href="/submit-scenario" className="btn btn-primary" style={{ alignSelf: "flex-start" }}>
                 Submit a Scenario
               </Link>
             </div>

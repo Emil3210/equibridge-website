@@ -110,7 +110,7 @@ export default function SolutionsPage() {
                 ))}
               </tbody>
             </table>
-            <Link href="/portal" className="btn btn-primary" style={{ alignSelf: "flex-start" }}>
+            <Link href="/submit-scenario" className="btn btn-primary" style={{ alignSelf: "flex-start" }}>
               Submit a Scenario
             </Link>
           </div>
@@ -125,7 +125,7 @@ export default function SolutionsPage() {
             <p className="body" style={{ fontSize: 17 }}>
               Send a client file and get a clear answer on whether a bridge fits, before anyone pulls a new credit report.
             </p>
-            <Link href="/portal" className="link-arrow">
+            <Link href="/submit-scenario" className="link-arrow">
               Start a scenario review →
             </Link>
           </div>
