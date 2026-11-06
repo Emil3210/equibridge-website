@@ -103,6 +103,6 @@ export async function submitScenario(_prev: FormState, fd: FormData): Promise<Fo
   }
 
   return path === "documents"
-    ? { status: "ok", message: "Thanks — we’ll email you a secure upload link for the 1003/1008 within one business day." }
+    ? { status: "ok", message: "Thanks — we’ll email you a secure upload link for the 1003/1008 within one business day. Please don’t email the file as an attachment." }
     : { status: "ok", message: `Thanks — your scenario was received. Expect a readiness review within ${REVIEW_TURNAROUND}.` };
 }

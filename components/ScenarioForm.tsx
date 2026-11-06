@@ -4,6 +4,7 @@ import Link from "next/link";
 import { startTransition, useActionState, useState } from "react";
 import type { FormState } from "@/app/actions";
 import { submitScenario } from "@/app/scenario-actions";
+import { SECURE_UPLOAD_URL } from "@/lib/site";
 
 const initial: FormState = { status: "idle", message: "" };
 
@@ -140,6 +141,16 @@ export default function ScenarioForm() {
       <div className="card stack" style={{ gap: 16, padding: 40 }} role="status">
         <h2 style={{ fontSize: 28, fontWeight: 800, color: "var(--teal-deep)" }}>Scenario received</h2>
         <p className="body" style={{ fontSize: 17 }}>{state.message}</p>
+        {path === "documents" && SECURE_UPLOAD_URL ? (
+          <div className="notice stack" style={{ gap: 10 }}>
+            <span>
+              Ready now? Upload the 1003/1008 through our secure, encrypted upload page. You won’t see anyone else’s files.
+            </span>
+            <a href={SECURE_UPLOAD_URL} className="btn btn-primary btn-sm" style={{ alignSelf: "flex-start" }} target="_blank" rel="noopener noreferrer">
+              Upload Securely
+            </a>
+          </div>
+        ) : null}
         <div className="row" style={{ gap: 12 }}>
           <Link href="/how-it-works" className="btn btn-outline btn-sm">
             Review how it works
