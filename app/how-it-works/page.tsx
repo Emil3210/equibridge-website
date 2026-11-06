@@ -26,8 +26,8 @@ export default async function HowItWorksPage({
       </div>
       <div className="container stack" style={{ gap: 18, paddingTop: 56 }}>
         <div className="stack" style={{ gap: 8 }}>
-          <p className="eyebrow">Watch · 80 seconds</p>
-          <h2 className="h2">How a bridge turns an “almost” file into a closed loan</h2>
+          <p className="eyebrow">Watch · under 2 minutes</p>
+          <h2 className="h2">How a bridge makes a credit-constrained borrower refinance-ready</h2>
         </div>
         <Explainer />
       </div>

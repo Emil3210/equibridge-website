@@ -57,17 +57,17 @@ export default function HomePage() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 16 }}>
                 <div className="card-tint" style={{ padding: 18 }}>
                   <p className="small">Card utilization</p>
-                  <p style={{ fontFamily: "var(--font-heading)", fontSize: 22, fontWeight: 800, whiteSpace: "nowrap" }}>87% → 0%</p>
+                  <p style={{ fontFamily: "var(--font-heading)", fontSize: 22, fontWeight: 800, whiteSpace: "nowrap" }}>95% → 3%</p>
                 </div>
                 <div className="card-tint" style={{ padding: 18 }}>
-                  <p className="small">Monthly debt payments</p>
-                  <p style={{ fontFamily: "var(--font-heading)", fontSize: 22, fontWeight: 800, whiteSpace: "nowrap" }}>$2,153 → $949</p>
+                  <p className="small">Paid directly to cards</p>
+                  <p style={{ fontFamily: "var(--font-heading)", fontSize: 22, fontWeight: 800, whiteSpace: "nowrap" }}>$33,200</p>
                 </div>
               </div>
               <div className="stack" style={{ gap: 10 }}>
                 <div className="row small" style={{ justifyContent: "space-between" }}>
                   <span>Bridge closes</span>
-                  <span>Exit loan · ~6 weeks</span>
+                  <span>Refinance · ~6 weeks</span>
                 </div>
                 <div style={{ height: 10, borderRadius: 999, background: "var(--tint)", overflow: "hidden" }}>
                   <div
@@ -82,8 +82,8 @@ export default function HomePage() {
               </div>
               <ul className="checklist" style={{ fontSize: 15, lineHeight: 1.8 }}>
                 <li>Cards paid directly by EquiBridge</li>
-                <li>Exit loan pre-approved, pending score</li>
-                <li>Fully amortizing fallback if no exit</li>
+                <li>Takeout lender conditionally approves first</li>
+                <li>Fully amortizing if the refinance doesn’t close</li>
               </ul>
             </div>
           </div>

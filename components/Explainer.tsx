@@ -10,38 +10,45 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export const DURATION = 80; // seconds
+export const DURATION = 99; // seconds
 
 // ---------- Story content (edit here) ----------
+// Scenes 1–5 were built on a 0–68s clock; they now start after the 10-second hook (HOOK).
+const HOOK = 10;
 const SCENES = [
-  { start: 0, end: 14, label: "The “almost” file" },
-  { start: 14, end: 28, label: "Score simulator" },
-  { start: 28, end: 43, label: "The bridge" },
-  { start: 43, end: 57, label: "Rapid rescore" },
-  { start: 57, end: 68, label: "Score updated" },
-  { start: 68, end: 80, label: "The result" },
+  { start: 0, end: 10, label: "The problem" },
+  { start: 10, end: 24, label: "The “almost” file" },
+  { start: 24, end: 38, label: "Score simulator" },
+  { start: 38, end: 53, label: "Approval, then the bridge" },
+  { start: 53, end: 67, label: "Rapid rescore" },
+  { start: 67, end: 78, label: "Score updated" },
+  { start: 78, end: 87, label: "If it doesn’t close" },
+  { start: 87, end: 99, label: "Refinance-ready" },
 ];
 
 const CAPTIONS = [
-  { at: 0, text: "Meet our sample borrower: on-time payments and solid equity in their home." },
-  { at: 4, text: "But four credit cards are near their limits: 95% overall utilization." },
-  { at: 8, text: "No lates, collections, liens or judgments. High utilization alone is pulling the score down." },
-  { at: 11, text: "Their middle score is 592. The loan program they need requires 620." },
-  { at: 14, text: "Before anything moves, the future lender runs a score simulation." },
-  { at: 18, text: "If the card balances drop to near zero, utilization falls from 95% to about 3%." },
-  { at: 22, text: "The projected middle score clears 620. Now there’s a plan, not “come back in a year.”" },
-  { at: 28, text: "The lender brings the file to EquiBridge and requests a bridge loan." },
-  { at: 32, text: "EquiBridge funds a closed-end second mortgage, and the proceeds go through escrow." },
-  { at: 36, text: "Escrow pays each card company directly: $33,200 retired, and no cash goes to the borrower." },
-  { at: 43, text: "Each card company provides a statement or letter showing the new $0 or low balance." },
-  { at: 47, text: "The future lender sends that proof to the credit bureaus through a rapid rescore." },
-  { at: 51, text: "Typical timing: about one to two weeks." },
-  { at: 57, text: "The bureaus update. The new middle score is 648." },
-  { at: 61, text: "That clears the 620 minimum, so the future lender closes the new loan." },
-  { at: 64, text: "The new loan pays off the EquiBridge bridge. The process is complete." },
-  { at: 68, text: "The homeowner gets the loan, or better terms, that high card balances were blocking." },
-  { at: 72, text: "The lender closes a file that was “almost,” and EquiBridge is repaid." },
-  { at: 76, text: "EquiBridge Capital. Intelligent Lending. Greater Possibilities." },
+  { at: 0, text: "Your borrower has the income. They have the equity. They have a perfect payment history." },
+  { at: 5, text: "But their credit score is just below your lender’s minimum." },
+  { at: 10, text: "Here’s the file: four credit cards near their limits, 95% overall utilization." },
+  { at: 17, text: "No lates, no collections, no liens or judgments. High utilization alone is holding the score down." },
+  { at: 21, text: "Middle score: 592. The takeout loan requires 620." },
+  { at: 24, text: "Before anything moves, the takeout lender runs a score simulation." },
+  { at: 28, text: "If card balances drop to near zero, utilization falls from 95% to about 3%." },
+  { at: 32, text: "Projected middle score: about 648. A projection is an estimate, not a guarantee." },
+  { at: 38, text: "The takeout lender has already reviewed income, assets and value, and issued a conditional approval." },
+  { at: 42, text: "The remaining condition is clearly identified: a 620+ middle score. Only then does EquiBridge fund." },
+  { at: 46, text: "Escrow pays each card company directly: $33,200 retired, and no cash goes to the borrower." },
+  { at: 53, text: "Each card company provides a statement or letter showing the new $0 or low balance." },
+  { at: 57, text: "The takeout lender sends that proof to the credit bureaus through a rapid rescore." },
+  { at: 61, text: "Typical timing: about one to two weeks." },
+  { at: 67, text: "The bureaus update. In this example, the new middle score is 648, in line with the projection." },
+  { at: 71, text: "With the remaining condition cleared, the takeout lender closes the refinance." },
+  { at: 74, text: "The refinance pays off the EquiBridge bridge." },
+  { at: 78, text: "Conditional approval is not a guarantee. A score can land lower, or other conditions can change." },
+  { at: 82, text: "If it doesn’t close, the bridge stays a fully amortizing loan the borrower can afford on its own." },
+  { at: 87, text: "We don’t simply provide bridge financing." },
+  { at: 90, text: "We help turn a qualified, credit-constrained borrower into a refinance-ready borrower." },
+  { at: 95, text: "EquiBridge Capital. Intelligent Lending. Greater Possibilities." },
 ];
 
 const ACCOUNTS = [
@@ -280,6 +287,126 @@ function Doc({ x, y, opacity }: { x: number; y: number; opacity: number }) {
 }
 
 // ---------- Scenes ----------
+function Hook({ t }: { t: number }) {
+  const items = [
+    { title: "Income", text: "Documented and stable" },
+    { title: "Equity", text: "Plenty in the home" },
+    { title: "Payment history", text: "No late payments" },
+  ];
+  const lo = 550;
+  const hi = 700;
+  const trackW = 640;
+  const xOf = (v: number) => ((v - lo) / (hi - lo)) * trackW;
+  return (
+    <>
+      <Header t={t} a={-1} eyebrow="The file every broker knows" title="Your borrower is almost there" />
+      {items.map((it, k) => (
+        <Abs key={it.title} x={60 + k * 400} y={140} w={360} h={130} style={{ ...panel, display: "flex", gap: 18, alignItems: "center", ...fade(t, 0.4 + k * 1.3) }}>
+          <span
+            style={{
+              flex: "0 0 52px",
+              height: 52,
+              borderRadius: 999,
+              background: C.ok,
+              color: "#fff",
+              fontSize: 26,
+              fontWeight: 800,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ✓
+          </span>
+          <div>
+            <p style={{ fontFamily: H, fontSize: 24, fontWeight: 800 }}>{it.title}</p>
+            <p style={{ fontSize: 17, color: C.body, marginTop: 4 }}>{it.text}</p>
+          </div>
+        </Abs>
+      ))}
+      <Abs x={160} y={310} w={960} h={290} style={{ ...panel, padding: "28px 40px", ...fade(t, 5) }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+          <div>
+            <Label>Middle credit score</Label>
+            <p style={{ fontFamily: H, fontSize: 80, fontWeight: 800, lineHeight: 1, marginTop: 8 }}>{SCORES_BEFORE[1]}</p>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <Label>Lender minimum</Label>
+            <p style={{ fontFamily: H, fontSize: 80, fontWeight: 800, lineHeight: 1, marginTop: 8, color: C.deep }}>{MINIMUM}</p>
+          </div>
+        </div>
+        <div style={{ position: "relative", margin: "26px auto 0", width: trackW, height: 44 }}>
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 10,
+              width: trackW,
+              height: 14,
+              borderRadius: 999,
+              background: `linear-gradient(90deg, ${C.warnBg} 0%, ${C.warnBg} ${(xOf(MINIMUM) / trackW) * 100}%, ${C.mint} ${(xOf(MINIMUM) / trackW) * 100}%, ${C.mint} 100%)`,
+            }}
+          />
+          <div style={{ position: "absolute", left: xOf(MINIMUM) - 1, top: 0, width: 3, height: 34, background: C.navy }} />
+          <div
+            style={{
+              position: "absolute",
+              left: xOf(SCORES_BEFORE[1]) - 13,
+              top: 4,
+              width: 26,
+              height: 26,
+              borderRadius: 999,
+              background: C.warn,
+              border: "4px solid #fff",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
+            }}
+          />
+        </div>
+        <div style={{ textAlign: "center", marginTop: 14, ...fade(t, 6.5) }}>
+          <Pill tone="warn">Just below the minimum: {MINIMUM - SCORES_BEFORE[1]} points short</Pill>
+        </div>
+      </Abs>
+    </>
+  );
+}
+
+function PlanB({ t }: { t: number }) {
+  const ifNot = [
+    "The score lands lower than projected, or income, value or rates change",
+    "The bridge stays a fully amortizing second mortgage",
+    "It was underwritten so the borrower can afford it on its own",
+    "The refinance can be revisited once conditions are met",
+  ];
+  return (
+    <>
+      <Header t={t} a={0} eyebrow="Know the risk" title="Conditional approval isn’t a guarantee" />
+      <Abs x={60} y={140} w={470} h={330} style={{ ...panel, borderTop: `6px solid ${C.teal}`, ...fade(t, 0.6) }}>
+        <Label>If the conditions are met</Label>
+        <p style={{ fontFamily: H, fontSize: 26, fontWeight: 800, marginTop: 14, lineHeight: 1.3 }}>
+          The refinance closes and pays off the bridge.
+        </p>
+        <p style={{ fontSize: 17, color: C.body, marginTop: 14, lineHeight: 1.5 }}>
+          That’s the plan for every file, and why the takeout lender reviews it before EquiBridge funds.
+        </p>
+      </Abs>
+      <Abs x={560} y={140} w={660} h={330} style={{ ...panel, borderTop: `6px solid ${C.warn}`, ...fade(t, 3.2) }}>
+        <Label style={{ color: C.warn }}>If they aren’t</Label>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 16 }}>
+          {ifNot.map((line, k) => (
+            <div key={line} style={{ display: "flex", gap: 12, alignItems: "flex-start", fontSize: 18, lineHeight: 1.4, ...fade(t, 3.8 + k * 0.6) }}>
+              <span style={{ flex: "0 0 10px", height: 10, borderRadius: 999, background: C.teal, marginTop: 8 }} />
+              {line}
+            </div>
+          ))}
+        </div>
+      </Abs>
+      <div style={{ position: "absolute", left: 0, top: 510, width: 1280, textAlign: "center", ...fade(t, 6.2) }}>
+        <Pill tone="info">Every bridge is underwritten for ability to repay, without assuming the refinance closes</Pill>
+      </div>
+    </>
+  );
+}
+
 function Scene({ t, i, children }: { t: number; i: number; children: React.ReactNode }) {
   const s = SCENES[i];
   const last = i === SCENES.length - 1;
@@ -400,7 +527,7 @@ function S2({ t }: { t: number }) {
   const xOf = (v: number) => ((v - lo) / (hi - lo)) * trackW;
   return (
     <>
-      <Header t={t} a={s0} eyebrow="Step 2 · At the future lender" title="Score simulator: what if the balances drop?" />
+      <Header t={t} a={s0} eyebrow="Step 2 · At the takeout lender" title="Score simulator: what if the balances drop?" />
       <Abs x={60} y={130} w={600} h={480} style={{ ...panel, ...fade(t, s0 + 0.3) }}>
         <Label>Simulated payoff</Label>
         <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 18 }}>
@@ -441,11 +568,11 @@ function S2({ t }: { t: number }) {
       </Abs>
 
       <Abs x={690} y={130} w={530} h={480} style={{ ...panel, ...fade(t, s0 + 1.5) }}>
-        <Label>Projected middle score</Label>
+        <Label>Projected middle score (estimate)</Label>
         <p style={{ fontFamily: H, fontSize: 104, fontWeight: 800, lineHeight: 1, marginTop: 22, color: score >= MINIMUM ? C.deep : C.navy }}>
           {score}
         </p>
-        <p style={{ fontSize: 16, color: C.muted, marginTop: 6 }}>Estimate from the lender’s score simulator</p>
+        <p style={{ fontSize: 16, color: C.muted, marginTop: 6 }}>Simulator estimate only. Not a guaranteed result.</p>
         <div style={{ position: "relative", marginTop: 46, width: trackW, height: 60 }}>
           <div
             style={{
@@ -479,7 +606,7 @@ function S2({ t }: { t: number }) {
           <span style={{ position: "absolute", right: 0, top: 44, fontSize: 14, color: C.muted }}>{hi}</span>
         </div>
         <div style={{ marginTop: 22, ...fade(t, s0 + 11) }}>
-          <Pill tone="ok">✓ Clears the {MINIMUM} minimum</Pill>
+          <Pill tone="ok">Projected to clear {MINIMUM}</Pill>
         </div>
         <p style={{ fontSize: 14, color: C.muted, marginTop: 18 }}>Simulation includes the new bridge loan and its credit inquiry.</p>
       </Abs>
@@ -491,41 +618,47 @@ function S3({ t }: { t: number }) {
   const s0 = 28;
   const credX = [70, 365, 660, 955];
   const ex = 1060;
-  const ey = 272;
+  const ey = 292;
   return (
     <>
-      <Header t={t} a={s0} eyebrow="Step 3 · The bridge" title="The lender requests a bridge loan from EquiBridge" />
+      <Header t={t} a={s0} eyebrow="Step 3 · Approval first, then the bridge" title="The takeout lender approves, then EquiBridge funds" />
       <svg width={1280} height={720} style={{ position: "absolute", inset: 0 }} aria-hidden="true">
-        <Arrow x1={352} y1={210} x2={504} y2={210} p={at(t, s0 + 1.5, 1)} />
-        <Arrow x1={772} y1={210} x2={924} y2={210} p={at(t, s0 + 4.5, 1)} />
+        <Arrow x1={352} y1={220} x2={504} y2={220} p={at(t, s0 + 1.5, 1)} />
+        <Arrow x1={772} y1={220} x2={924} y2={220} p={at(t, s0 + 4.5, 1)} />
         {credX.map((x, k) => (
           <Arrow key={k} x1={ex} y1={ey} x2={x + 127} y2={414} p={at(t, s0 + 7.6 + k * 0.15, 1)} color={C.aqua} />
         ))}
       </svg>
-      <span style={{ position: "absolute", left: 352, top: 172, width: 152, textAlign: "center", fontSize: 15, fontWeight: 700, color: C.teal, ...fade(t, s0 + 2) }}>
+      <span style={{ position: "absolute", left: 352, top: 182, width: 152, textAlign: "center", fontSize: 15, fontWeight: 700, color: C.teal, ...fade(t, s0 + 2) }}>
         Bridge request
       </span>
-      <span style={{ position: "absolute", left: 772, top: 172, width: 152, textAlign: "center", fontSize: 15, fontWeight: 700, color: C.teal, ...fade(t, s0 + 5) }}>
+      <span style={{ position: "absolute", left: 772, top: 182, width: 152, textAlign: "center", fontSize: 15, fontWeight: 700, color: C.teal, ...fade(t, s0 + 5) }}>
         Loan proceeds
       </span>
       <Node
         x={90}
         y={150}
-        h={124}
-        title="Future lender"
-        sub="Exit loan conditionally approved, pending a 620+ middle score"
+        h={140}
+        title="Takeout lender"
+        sub={
+          <>
+            ✓ Income, assets, value reviewed
+            <br />
+            <b style={{ color: C.warn }}>Remaining: 620+ middle score</b>
+          </>
+        }
         style={fade(t, s0 + 0.3)}
       />
       <Node
         x={510}
         y={150}
-        h={124}
+        h={140}
         dark
         title="EquiBridge Capital"
         sub={`Closed-end second mortgage · ${money(PAYOFF)} card payoff`}
         style={fade(t, s0 + 2.6)}
       />
-      <Node x={930} y={150} h={124} title="Escrow" sub="Pays each card company directly" style={fade(t, s0 + 5.5)} />
+      <Node x={930} y={150} h={140} title="Escrow" sub="Pays each card company directly" style={fade(t, s0 + 5.5)} />
 
       {ACCOUNTS.map((a, k) => {
         const travel = prog(t, s0 + 8.8 + k * 0.25, 1.4);
@@ -574,8 +707,13 @@ function S3({ t }: { t: number }) {
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: 0, top: 584, width: 1280, textAlign: "center", ...fade(t, s0 + 11.5) }}>
-        <Pill tone="info">No cash to the borrower: paid directly through escrow</Pill>
+      <div style={{ position: "absolute", left: 0, top: 584, width: 1280, display: "flex", justifyContent: "center", gap: 14 }}>
+        <Pill tone="info" style={fade(t, s0 + 4)}>
+          Funded only after the takeout lender’s conditional approval
+        </Pill>
+        <Pill tone="info" style={fade(t, s0 + 11.5)}>
+          No cash to the borrower
+        </Pill>
       </div>
     </>
   );
@@ -633,7 +771,7 @@ function S4({ t }: { t: number }) {
         y={vy}
         w={260}
         h={150}
-        title="Future lender’s credit vendor"
+        title="Takeout lender’s credit vendor"
         sub="Rapid rescore submitted with the updated balance letters"
         style={{ border: `2px solid ${C.deep}`, ...fade(t, s0 + 1.2) }}
       />
@@ -718,7 +856,7 @@ function S5({ t }: { t: number }) {
   const xs = [145, 505, 865];
   return (
     <>
-      <Header t={t} a={s0} eyebrow="Step 5 · Score updated" title="The middle score clears the minimum" />
+      <Header t={t} a={s0} eyebrow="Step 5 · Score updated" title="The update clears the remaining condition" />
       {SCORES_BEFORE.map((b, k) => {
         const mid = k === 1;
         const v = Math.round(lerp(b, SCORES_AFTER[k], up));
@@ -748,14 +886,17 @@ function S5({ t }: { t: number }) {
       <div style={{ position: "absolute", left: 0, top: 340, width: 1280, display: "flex", justifyContent: "center", gap: 16, ...fade(t, s0 + 4) }}>
         <Pill tone="warn">Before: {SCORES_BEFORE[1]}</Pill>
         <span style={{ fontFamily: H, fontSize: 24, fontWeight: 800, color: C.teal, alignSelf: "center" }}>→</span>
-        <Pill tone="info">After: {SCORES_AFTER[1]}</Pill>
-        <Pill tone="ok">✓ Above the {MINIMUM} minimum</Pill>
+        <Pill tone="info">Actual: {SCORES_AFTER[1]}</Pill>
+        <Pill tone="ok">✓ Condition cleared: {MINIMUM}+</Pill>
       </div>
+      <p style={{ position: "absolute", left: 0, top: 392, width: 1280, textAlign: "center", fontSize: 15, color: C.muted, ...fade(t, s0 + 4.5) }}>
+        Illustrative example: actual results can come in higher or lower than the projection.
+      </p>
       <svg width={1280} height={720} style={{ position: "absolute", inset: 0 }} aria-hidden="true">
         <Arrow x1={594} y1={480} x2={684} y2={480} p={at(t, s0 + 6.4, 0.8)} />
       </svg>
-      <Node x={260} y={425} w={330} h={110} dark title="New loan closes" sub="Approved, or better terms, now that the score qualifies" style={fade(t, s0 + 5.4)} />
-      <Node x={690} y={425} w={330} h={110} title="Bridge paid off" sub="From the new loan’s proceeds" style={fade(t, s0 + 7.2)} />
+      <Node x={260} y={425} w={330} h={110} dark title="Refinance closes" sub="The takeout lender funds the permanent loan" style={fade(t, s0 + 5.4)} />
+      <Node x={690} y={425} w={330} h={110} title="Bridge paid off" sub="From the refinance proceeds" style={fade(t, s0 + 7.2)} />
       <div style={{ position: "absolute", left: 0, top: 568, width: 1280, textAlign: "center", ...fade(t, s0 + 8.4) }}>
         <Pill tone="ok">✓ Process complete</Pill>
       </div>
@@ -798,59 +939,68 @@ function Icon({ kind }: { kind: "home" | "lender" | "bridge" }) {
 }
 
 function S6({ t }: { t: number }) {
-  const s0 = 68;
+  // Local clock: 0 = start of this scene.
   const tiles: { icon: "home" | "lender" | "bridge"; title: string; text: string; a: number }[] = [
-    { icon: "home", title: "Homeowner", text: "Gets the loan, or better terms, that high card balances were blocking.", a: 0.5 },
-    { icon: "lender", title: "Lender or broker", text: "Closes an “almost” file and keeps the client relationship.", a: 4.2 },
-    { icon: "bridge", title: "EquiBridge", text: "The bridge is repaid when the new loan closes.", a: 4.8 },
+    { icon: "lender", title: "Broker or lender", text: "Turns an “almost” file into a refinance-ready file, and keeps the client.", a: 4.2 },
+    { icon: "home", title: "Homeowner", text: "Gets the loan, or better terms, that high card balances were blocking.", a: 4.8 },
+    { icon: "bridge", title: "EquiBridge", text: "Funds only after takeout approval, underwritten to be repaid either way.", a: 5.4 },
   ];
   return (
     <>
-      <Header t={t} a={s0} eyebrow="The result" title="Everyone moves forward" />
+      <Abs x={60} y={32} w={1160} style={fade(t, 0)}>
+        <Label>Our approach</Label>
+        <h3 style={{ fontFamily: H, fontSize: 34, fontWeight: 800, color: C.navy, marginTop: 6 }}>
+          We don’t simply provide bridge financing.
+        </h3>
+        <p style={{ fontFamily: H, fontSize: 24, fontWeight: 700, color: C.teal, marginTop: 10, ...fade(t, 3) }}>
+          We help turn a qualified, credit-constrained borrower into a refinance-ready borrower.
+        </p>
+      </Abs>
       {tiles.map((tile, k) => (
-        <Abs key={tile.title} x={60 + k * 400} y={130} w={360} h={250} style={{ ...panel, ...fade(t, s0 + tile.a) }}>
+        <Abs key={tile.title} x={60 + k * 400} y={190} w={360} h={214} style={{ ...panel, padding: 24, ...fade(t, tile.a) }}>
           <Icon kind={tile.icon} />
-          <p style={{ fontFamily: H, fontSize: 24, fontWeight: 800, marginTop: 18 }}>{tile.title}</p>
-          <p style={{ fontSize: 18, lineHeight: 1.5, color: C.body, marginTop: 8 }}>{tile.text}</p>
+          <p style={{ fontFamily: H, fontSize: 22, fontWeight: 800, marginTop: 14 }}>{tile.title}</p>
+          <p style={{ fontSize: 17, lineHeight: 1.45, color: C.body, marginTop: 6 }}>{tile.text}</p>
         </Abs>
       ))}
       <div
         style={{
           position: "absolute",
           left: 0,
-          top: 410,
+          top: 432,
           width: 1280,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          gap: 22,
-          ...fade(t, s0 + 8),
+          gap: 20,
+          ...fade(t, 8),
         }}
       >
-        <Image src="/logo-mark.png" alt="" width={232} height={80} loading="eager" />
+        <Image src="/logo-mark.png" alt="" width={174} height={60} loading="eager" />
         <div>
-          <p style={{ fontFamily: H, fontSize: 40, fontWeight: 800, lineHeight: 1 }}>
+          <p style={{ fontFamily: H, fontSize: 34, fontWeight: 800, lineHeight: 1 }}>
             Equi<span style={{ color: C.teal }}>Bridge</span>{" "}
-            <span style={{ fontSize: 18, letterSpacing: 6, color: C.deep }}>CAPITAL</span>
+            <span style={{ fontSize: 16, letterSpacing: 6, color: C.deep }}>CAPITAL</span>
           </p>
-          <p style={{ fontSize: 20, color: C.body, marginTop: 8 }}>Intelligent Lending. Greater Possibilities.</p>
+          <p style={{ fontSize: 18, color: C.body, marginTop: 6 }}>Intelligent Lending. Greater Possibilities.</p>
         </div>
       </div>
       <p
         style={{
           position: "absolute",
           left: 140,
-          top: 548,
+          top: 556,
           width: 1000,
           textAlign: "center",
           fontSize: 14,
           lineHeight: 1.5,
           color: C.muted,
-          ...fade(t, s0 + 8.6),
+          ...fade(t, 8.6),
         }}
       >
-        Illustrative example with a fictional borrower. Not a commitment to lend. Credit score results vary and are not
-        guaranteed. All loans are subject to credit approval and underwriting. The bridge loan is secured by the home.
+        Illustrative example with a fictional borrower. Not a commitment to lend. Projected and actual credit scores vary
+        and are not guaranteed. Conditional approval does not guarantee a refinance. All loans are subject to credit
+        approval and underwriting. The bridge loan is secured by the home.
       </p>
     </>
   );
@@ -961,22 +1111,28 @@ export default function Explainer({ record = false }: { record?: boolean }) {
           style={{ transform: `translate(${box.x}px, ${box.y}px) scale(${box.s})`, opacity: box.s ? 1 : 0 }}
         >
           <Scene t={t} i={0}>
-            <S1 t={t} />
+            <Hook t={t} />
           </Scene>
           <Scene t={t} i={1}>
-            <S2 t={t} />
+            <S1 t={t - HOOK} />
           </Scene>
           <Scene t={t} i={2}>
-            <S3 t={t} />
+            <S2 t={t - HOOK} />
           </Scene>
           <Scene t={t} i={3}>
-            <S4 t={t} />
+            <S3 t={t - HOOK} />
           </Scene>
           <Scene t={t} i={4}>
-            <S5 t={t} />
+            <S4 t={t - HOOK} />
           </Scene>
           <Scene t={t} i={5}>
-            <S6 t={t} />
+            <S5 t={t - HOOK} />
+          </Scene>
+          <Scene t={t} i={6}>
+            <PlanB t={t - SCENES[6].start} />
+          </Scene>
+          <Scene t={t} i={7}>
+            <S6 t={t - SCENES[7].start} />
           </Scene>
           <span style={{ position: "absolute", right: 60, top: 36 }}>
             <Pill tone="info" style={{ fontSize: 14, padding: "6px 14px" }}>
