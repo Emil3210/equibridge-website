@@ -1,6 +1,8 @@
 "use server";
 
+import { after } from "next/server";
 import { supabaseServer } from "@/lib/supabase";
+import { sendConfirmation, sendInternalAlert } from "@/lib/email";
 
 export type FormState = { status: "idle" | "ok" | "error"; message: string };
 
@@ -37,6 +39,23 @@ export async function submitContact(_prev: FormState, formData: FormData): Promi
     console.error("contact insert failed", error.code);
     return { status: "error", message: "Something went wrong. Please email us directly." };
   }
+  after(async () => {
+    await Promise.all([
+      sendInternalAlert(`New contact message from ${full_name}`, [
+        ["From", `${full_name} (${role})`],
+        ["Email", email],
+        ["Message", message.length > 300 ? message.slice(0, 300) + "…" : message],
+      ]),
+      sendConfirmation({
+        to: email,
+        firstName: full_name.split(" ")[0],
+        subject: "Thanks for contacting EquiBridge Capital",
+        heading: "We got your message",
+        paragraphs: ["Thanks for reaching out to EquiBridge Capital. We’ll get back to you within one business day."],
+        cta: { label: "Submit a scenario", href: "https://equibridgecapital.com/submit-scenario" },
+      }),
+    ]);
+  });
   return { status: "ok", message: "Thanks — we’ll be in touch within one business day." };
 }
 

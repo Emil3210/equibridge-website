@@ -2,7 +2,9 @@
 
 import { supabaseServer } from "@/lib/supabase";
 import type { FormState } from "@/app/actions";
+import { after } from "next/server";
 import { REVIEW_TURNAROUND } from "@/lib/site";
+import { sendConfirmation, sendInternalAlert, usd } from "@/lib/email";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const ROLES = ["broker", "lender", "homeowner", "investor", "other"];
@@ -101,6 +103,57 @@ export async function submitScenario(_prev: FormState, fd: FormData): Promise<Fo
     console.error("scenario insert failed", error.code);
     return { status: "error", message: "Something went wrong saving your scenario. Please email us directly." };
   }
+
+  // Emails go out after the response, so the broker isn't kept waiting. Failures are logged, never shown.
+  after(async () => {
+    const r = row as Record<string, string | number | boolean | null>;
+    const label = (v: unknown) => (v === null || v === undefined || v === "" ? "—" : String(v).replace(/_/g, " "));
+    const cltv =
+      typeof r.first_lien_amount === "number" && typeof r.payoff_amount === "number" && typeof r.appraised_value === "number" && r.appraised_value > 0
+        ? `${(((r.first_lien_amount + r.payoff_amount) / r.appraised_value) * 100).toFixed(1)}%`
+        : "—";
+    const summary: [string, string][] = [
+      ["Submitted by", `${full_name} (${label(role)})`],
+      ["Email", email],
+      ["Phone", label(r.phone)],
+      ["Company", label(r.company)],
+      ["Path", path === "documents" ? "Has 1003/1008 – send secure upload link" : "Quick scenario"],
+      ["Property state", label(r.property_state)],
+    ];
+    if (path === "quick") {
+      summary.push(
+        ["1st loan", usd(r.first_lien_amount)],
+        ["Payoff needed", usd(r.payoff_amount)],
+        ["Projected value", usd(r.appraised_value)],
+        ["Est. combined LTV", cltv],
+        ["Housing / occupancy", `${label(r.housing_type)} / ${label(r.occupancy)}`],
+        ["Middle score", label(r.middle_fico)],
+        ["Simulation run", r.sim_run === null ? "—" : r.sim_run ? `Yes – projected ${label(r.projected_fico)} with ${usd(r.payoff_for_projected)} paid` : "No"],
+        ["Income underwritten / VOEs", r.income_underwritten === null ? "—" : r.income_underwritten ? `Yes – ratios work: ${label(r.ratios_work)}` : "No"],
+        ["Income type", label(r.income_type)],
+      );
+    }
+    await Promise.all([
+      sendInternalAlert(path === "documents" ? `1003/1008 upload request from ${full_name}` : `New quick scenario from ${full_name}`, summary),
+      sendConfirmation({
+        to: email,
+        firstName: full_name.split(" ")[0],
+        subject: path === "documents" ? "Your EquiBridge secure upload request" : "We received your scenario",
+        heading: path === "documents" ? "Secure upload link on the way" : "Scenario received",
+        paragraphs:
+          path === "documents"
+            ? [
+                "Thanks for sending a file to EquiBridge Capital. We’ll email you a secure upload link for the 1003/1008 within one business day.",
+                "Please upload through that link only. Don’t send borrower documents as email attachments.",
+              ]
+            : [
+                `Thanks for sending a scenario to EquiBridge Capital. Expect a readiness review within ${REVIEW_TURNAROUND}: payoff plan, projected CLTV and DTI, and any open conditions.`,
+                "A bridge is funded only after the takeout lender’s conditional approval. If you have the score simulation or conditional approval, keep them handy for the review.",
+              ],
+        cta: { label: "See how the bridge works", href: "https://equibridgecapital.com/how-it-works" },
+      }),
+    ]);
+  });
 
   return path === "documents"
     ? { status: "ok", message: "Thanks — we’ll email you a secure upload link for the 1003/1008 within one business day. Please don’t email the file as an attachment." }
