@@ -15,48 +15,48 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export const DURATION = 112; // seconds
+export const DURATION = 141.93; // seconds
 
 // ---------- Story content (edit here) ----------
 const SCENES = [
-  { start: 0, end: 27.5, label: "The problem" },
-  { start: 27.5, end: 38, label: "The file" },
-  { start: 38, end: 50, label: "Score simulation" },
-  { start: 50, end: 65.5, label: "Conditions first" },
-  { start: 65.5, end: 78, label: "Controlled funding" },
-  { start: 78, end: 86, label: "Rapid rescore" },
-  { start: 86, end: 93.5, label: "Refinance closes" },
-  { start: 93.5, end: 101.5, label: "Know the risk" },
-  { start: 101.5, end: 112, label: "Let’s talk" },
+  { start: 0, end: 27.5, label: "The problem", anim: 27.5 },
+  { start: 27.5, end: 43.99, label: "The file", anim: 10.5 },
+  { start: 43.99, end: 60.08, label: "Score simulation", anim: 12.0 },
+  { start: 60.08, end: 77.95, label: "Conditions first", anim: 15.5 },
+  { start: 77.95, end: 93.81, label: "Controlled funding", anim: 12.5 },
+  { start: 93.81, end: 103.03, label: "Rapid rescore", anim: 8.0 },
+  { start: 103.03, end: 113.3, label: "Refinance closes", anim: 7.5 },
+  { start: 113.3, end: 126.05, label: "Know the risk", anim: 8.0 },
+  { start: 126.05, end: 141.93, label: "Let’s talk", anim: 10.5 },
 ];
 
 // The narration script. Captions, the SRT file and the voiceover all come from this list.
 export const CAPTIONS = [
-  { at: 0, text: "Every mortgage broker knows this file." },
-  { at: 2.4, text: "Your borrower has the income, the home equity, and a perfect payment history." },
-  { at: 7.5, text: "But there’s one problem: their credit score falls just short of qualifying." },
-  { at: 12.3, text: "The culprit? “Proportion of balances to credit limits is too high.”" },
-  { at: 17.2, text: "What if paying down those credit cards could unlock the refinance?" },
-  { at: 21.8, text: "And what if the takeout lender could project the improvement before funding a single dollar?" },
-  { at: 27.7, text: "Here’s the file: four credit cards near their limits, and 95% overall utilization." },
-  { at: 32.6, text: "No late payments, no collections, no derogatory history. Middle score: 592. The takeout lender needs 620." },
-  { at: 38.2, text: "The takeout lender runs a credit score simulation." },
-  { at: 41.4, text: "Pay those balances down, and utilization drops from 95% to about 3%." },
-  { at: 46, text: "Projected middle score: 668. A 76-point projected improvement." },
-  { at: 50.2, text: "We don’t fund the bridge and hope the refinance works. We identify the remaining conditions first." },
-  { at: 56.8, text: "The takeout lender has already accepted income, assets, employment, appraisal, and title." },
-  { at: 61.6, text: "Only the middle score and the designated card payoffs remain." },
-  { at: 65.7, text: "Then EquiBridge funds a short-term, interest-only, closed-end second mortgage." },
-  { at: 70.2, text: "The $33,200 goes through escrow directly to the card companies." },
-  { at: 74.6, text: "No cash to the borrower. Every payoff documented." },
-  { at: 78.2, text: "The takeout lender submits proof of the new balances and requests a rapid rescore." },
-  { at: 82.6, text: "That typically takes about one to two weeks." },
-  { at: 86.2, text: "In this hypothetical example, the middle score updates to 668." },
-  { at: 89.6, text: "The refinance closes and pays off the EquiBridge second mortgage." },
-  { at: 93.7, text: "Conditional approval, score projections, and rapid rescoring don’t guarantee a refinance." },
-  { at: 97.6, text: "Every bridge loan must independently meet legal, underwriting, and repayment requirements." },
-  { at: 101.7, text: "EquiBridge Capital. Turning credit-constrained borrowers into refinance-ready opportunities." },
-  { at: 106.4, text: "Have a borrower who qualifies for everything except the credit score? Let’s see if EquiBridge can help." },
+  { at: 0.2, text: "Every mortgage broker knows this file." },
+  { at: 2.77, text: "Your borrower has the income, the home equity, and a perfect payment history." },
+  { at: 7.72, text: "But there’s one problem: their credit score falls just short of qualifying." },
+  { at: 12.59, text: "The culprit? “Proportion of balances to credit limits is too high.”" },
+  { at: 17.36, text: "What if paying down those credit cards could unlock the refinance?" },
+  { at: 21.27, text: "And what if the takeout lender could project the improvement before funding a single dollar?" },
+  { at: 27.9, text: "Here’s the file: four credit cards near their limits, and 95% overall utilization." },
+  { at: 34.35, text: "No late payments, no collections, no derogatory history. Middle score: 592. The takeout lender needs 620." },
+  { at: 44.39, text: "The takeout lender runs a credit score simulation." },
+  { at: 47.68, text: "Pay those balances down, and utilization drops from 95% to about 3%." },
+  { at: 53.64, text: "Projected middle score: 668. A 76-point projected improvement." },
+  { at: 60.48, text: "We don’t fund the bridge and hope the refinance works. We identify the remaining conditions first." },
+  { at: 67.23, text: "The takeout lender has already accepted income, assets, employment, appraisal, and title." },
+  { at: 73.59, text: "Only the middle score and the designated card payoffs remain." },
+  { at: 78.35, text: "Then EquiBridge funds a short-term, interest-only, closed-end second mortgage." },
+  { at: 84.03, text: "The $33,200 goes through escrow directly to the card companies." },
+  { at: 89.3, text: "No cash to the borrower. Every payoff documented." },
+  { at: 94.21, text: "The takeout lender submits proof of the new balances and requests a rapid rescore." },
+  { at: 99.72, text: "That typically takes about one to two weeks." },
+  { at: 103.43, text: "In this hypothetical example, the middle score updates to 668." },
+  { at: 108.47, text: "The refinance closes and pays off the EquiBridge second mortgage." },
+  { at: 113.7, text: "Conditional approval, score projections, and rapid rescoring don’t guarantee a refinance." },
+  { at: 119.83, text: "Every bridge loan must independently meet legal, underwriting, and repayment requirements." },
+  { at: 126.45, text: "EquiBridge Capital. Turning credit-constrained borrowers into refinance-ready opportunities." },
+  { at: 132.74, text: "Have a borrower who qualifies for everything except the credit score? Let’s see if EquiBridge can help." },
 ];
 
 const ACCOUNTS = [
@@ -303,7 +303,9 @@ function Scene({ t, i, children }: { t: number; i: number; children: (local: num
   if (!inScene) return null;
   const fadeIn = i === 0 ? 1 : at(t, s.start, 0.6);
   const fadeOut = last ? 1 : 1 - prog(t, s.end - 0.5, 0.5);
-  return <div style={{ position: "absolute", inset: 0, opacity: fadeIn * fadeOut }}>{children(t - s.start)}</div>;
+  // Each scene's animation was designed on an `anim`-second clock; stretch it to fit the voiceover.
+  const local = ((t - s.start) * s.anim) / (s.end - s.start);
+  return <div style={{ position: "absolute", inset: 0, opacity: fadeIn * fadeOut }}>{children(local)}</div>;
 }
 
 function Hook({ t }: { t: number }) {
