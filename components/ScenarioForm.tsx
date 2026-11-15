@@ -358,7 +358,7 @@ export default function ScenarioForm() {
               <div className="subfields">
                 <div className="field" style={{ maxWidth: 360 }}>
                   <label htmlFor="projected_fico">Projected middle score after payoff &amp; rapid rescore</label>
-                  <input id="projected_fico" name="projected_fico" type="number" inputMode="numeric" min={300} max={850} placeholder="e.g., 648" />
+                  <input id="projected_fico" name="projected_fico" type="number" inputMode="numeric" min={300} max={850} placeholder="e.g., 668" />
                 </div>
                 <MoneySlider
                   id="payoff_projected_slider"

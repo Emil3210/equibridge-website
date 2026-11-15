@@ -1,54 +1,62 @@
 "use client";
 
 /*
- * Animated explainer for the How It Works page.
+ * Animated explainer for the How It Works page (v3).
  * Everything is drawn on a fixed 1280×720 canvas and scaled to fit, so it looks the same
- * on every screen and can be recorded frame by frame into an MP4 (see /explainer?record=1).
+ * on every screen and can be recorded frame by frame into an MP4 (see /explainer?record=1
+ * and scripts/record-explainer.mjs).
+ *
+ * Timing: each scene has a start/end on the master clock (SCENES). Every scene component
+ * receives a LOCAL clock that starts at 0, so retiming to a new voiceover only means
+ * changing the SCENES and CAPTIONS numbers below.
  * Edit the story text in CAPTIONS and the sample numbers in ACCOUNTS / SCORES below.
  */
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export const DURATION = 99; // seconds
+export const DURATION = 112; // seconds
 
 // ---------- Story content (edit here) ----------
-// Scenes 1–5 were built on a 0–68s clock; they now start after the 10-second hook (HOOK).
-const HOOK = 10;
 const SCENES = [
-  { start: 0, end: 10, label: "The problem" },
-  { start: 10, end: 24, label: "The “almost” file" },
-  { start: 24, end: 38, label: "Score simulator" },
-  { start: 38, end: 53, label: "Approval, then the bridge" },
-  { start: 53, end: 67, label: "Rapid rescore" },
-  { start: 67, end: 78, label: "Score updated" },
-  { start: 78, end: 87, label: "If it doesn’t close" },
-  { start: 87, end: 99, label: "Refinance-ready" },
+  { start: 0, end: 27.5, label: "The problem" },
+  { start: 27.5, end: 38, label: "The file" },
+  { start: 38, end: 50, label: "Score simulation" },
+  { start: 50, end: 65.5, label: "Conditions first" },
+  { start: 65.5, end: 78, label: "Controlled funding" },
+  { start: 78, end: 86, label: "Rapid rescore" },
+  { start: 86, end: 93.5, label: "Refinance closes" },
+  { start: 93.5, end: 101.5, label: "Know the risk" },
+  { start: 101.5, end: 112, label: "Let’s talk" },
 ];
 
-const CAPTIONS = [
-  { at: 0, text: "Your borrower has the income. They have the equity. They have a perfect payment history." },
-  { at: 5, text: "But their credit score is just below your lender’s minimum." },
-  { at: 10, text: "Here’s the file: four credit cards near their limits, 95% overall utilization." },
-  { at: 17, text: "No lates, no collections, no liens or judgments. High utilization alone is holding the score down." },
-  { at: 21, text: "Middle score: 592. The takeout loan requires 620." },
-  { at: 24, text: "Before anything moves, the takeout lender runs a score simulation." },
-  { at: 28, text: "If card balances drop to near zero, utilization falls from 95% to about 3%." },
-  { at: 32, text: "Projected middle score: about 648. A projection is an estimate, not a guarantee." },
-  { at: 38, text: "The takeout lender has already reviewed income, assets and value, and issued a conditional approval." },
-  { at: 42, text: "The remaining condition is clearly identified: a 620+ middle score. Only then does EquiBridge fund." },
-  { at: 46, text: "Escrow pays each card company directly: $33,200 retired, and no cash goes to the borrower." },
-  { at: 53, text: "Each card company provides a statement or letter showing the new $0 or low balance." },
-  { at: 57, text: "The takeout lender sends that proof to the credit bureaus through a rapid rescore." },
-  { at: 61, text: "Typical timing: about one to two weeks." },
-  { at: 67, text: "The bureaus update. In this example, the new middle score is 648, in line with the projection." },
-  { at: 71, text: "With the remaining condition cleared, the takeout lender closes the refinance." },
-  { at: 74, text: "The refinance pays off the EquiBridge bridge." },
-  { at: 78, text: "Conditional approval is not a guarantee. A score can land lower, or other conditions can change." },
-  { at: 82, text: "If it doesn’t close, the bridge stays a fully amortizing loan the borrower can afford on its own." },
-  { at: 87, text: "We don’t simply provide bridge financing." },
-  { at: 90, text: "We help turn a qualified, credit-constrained borrower into a refinance-ready borrower." },
-  { at: 95, text: "EquiBridge Capital. Intelligent Lending. Greater Possibilities." },
+// The narration script. Captions, the SRT file and the voiceover all come from this list.
+export const CAPTIONS = [
+  { at: 0, text: "Every mortgage broker knows this file." },
+  { at: 2.4, text: "Your borrower has the income, the home equity, and a perfect payment history." },
+  { at: 7.5, text: "But there’s one problem: their credit score falls just short of qualifying." },
+  { at: 12.3, text: "The culprit? “Proportion of balances to credit limits is too high.”" },
+  { at: 17.2, text: "What if paying down those credit cards could unlock the refinance?" },
+  { at: 21.8, text: "And what if the takeout lender could project the improvement before funding a single dollar?" },
+  { at: 27.7, text: "Here’s the file: four credit cards near their limits, and 95% overall utilization." },
+  { at: 32.6, text: "No late payments, no collections, no derogatory history. Middle score: 592. The takeout lender needs 620." },
+  { at: 38.2, text: "The takeout lender runs a credit score simulation." },
+  { at: 41.4, text: "Pay those balances down, and utilization drops from 95% to about 3%." },
+  { at: 46, text: "Projected middle score: 668. A 76-point projected improvement." },
+  { at: 50.2, text: "We don’t fund the bridge and hope the refinance works. We identify the remaining conditions first." },
+  { at: 56.8, text: "The takeout lender has already accepted income, assets, employment, appraisal, and title." },
+  { at: 61.6, text: "Only the middle score and the designated card payoffs remain." },
+  { at: 65.7, text: "Then EquiBridge funds a short-term, interest-only, closed-end second mortgage." },
+  { at: 70.2, text: "The $33,200 goes through escrow directly to the card companies." },
+  { at: 74.6, text: "No cash to the borrower. Every payoff documented." },
+  { at: 78.2, text: "The takeout lender submits proof of the new balances and requests a rapid rescore." },
+  { at: 82.6, text: "That typically takes about one to two weeks." },
+  { at: 86.2, text: "In this hypothetical example, the middle score updates to 668." },
+  { at: 89.6, text: "The refinance closes and pays off the EquiBridge second mortgage." },
+  { at: 93.7, text: "Conditional approval, score projections, and rapid rescoring don’t guarantee a refinance." },
+  { at: 97.6, text: "Every bridge loan must independently meet legal, underwriting, and repayment requirements." },
+  { at: 101.7, text: "EquiBridge Capital. Turning credit-constrained borrowers into refinance-ready opportunities." },
+  { at: 106.4, text: "Have a borrower who qualifies for everything except the credit score? Let’s see if EquiBridge can help." },
 ];
 
 const ACCOUNTS = [
@@ -58,8 +66,9 @@ const ACCOUNTS = [
   { name: "Rewards card", bal: 8300, limit: 9000, target: 900 },
 ];
 const SCORES_BEFORE = [584, 592, 601];
-const SCORES_AFTER = [639, 648, 656];
+const SCORES_AFTER = [659, 668, 676]; // hypothetical illustration, middle = 668
 const MINIMUM = 620;
+const REASON = "Proportion of balances to credit limits is too high";
 
 // ---------- Helpers ----------
 const C = {
@@ -286,22 +295,37 @@ function Doc({ x, y, opacity }: { x: number; y: number; opacity: number }) {
   );
 }
 
-// ---------- Scenes ----------
+// ---------- Scenes (each gets a local clock: t = 0 at the start of its scene) ----------
+function Scene({ t, i, children }: { t: number; i: number; children: (local: number) => React.ReactNode }) {
+  const s = SCENES[i];
+  const last = i === SCENES.length - 1;
+  const inScene = t >= s.start && (last ? t <= s.end : t < s.end);
+  if (!inScene) return null;
+  const fadeIn = i === 0 ? 1 : at(t, s.start, 0.6);
+  const fadeOut = last ? 1 : 1 - prog(t, s.end - 0.5, 0.5);
+  return <div style={{ position: "absolute", inset: 0, opacity: fadeIn * fadeOut }}>{children(t - s.start)}</div>;
+}
+
 function Hook({ t }: { t: number }) {
   const items = [
-    { title: "Income", text: "Documented and stable" },
-    { title: "Equity", text: "Plenty in the home" },
-    { title: "Payment history", text: "No late payments" },
+    { title: "Income", text: "Documented and stable", a: 2.8 },
+    { title: "Home equity", text: "Plenty in the home", a: 4.2 },
+    { title: "Payment history", text: "Perfect: no late payments", a: 5.6 },
   ];
   const lo = 550;
   const hi = 700;
   const trackW = 640;
   const xOf = (v: number) => ((v - lo) / (hi - lo)) * trackW;
+  // Phase B: spotlight the reason code. Phase C: dark "What if…" wipe.
+  const dim = at(t, 12.1, 0.5);
+  const card = at(t, 12.4, 0.7);
+  const mark = ease(prog(t, 13.4, 1.3));
+  const wipe = ease(prog(t, 16.9, 0.9));
   return (
     <>
-      <Header t={t} a={-1} eyebrow="The file every broker knows" title="Your borrower is almost there" />
+      <Header t={t} a={-1} eyebrow="The file every broker knows" title="Your borrower qualifies for almost everything" />
       {items.map((it, k) => (
-        <Abs key={it.title} x={60 + k * 400} y={140} w={360} h={130} style={{ ...panel, display: "flex", gap: 18, alignItems: "center", ...fade(t, 0.4 + k * 1.3) }}>
+        <Abs key={it.title} x={60 + k * 400} y={140} w={360} h={130} style={{ ...panel, display: "flex", gap: 18, alignItems: "center", ...fade(t, it.a) }}>
           <span
             style={{
               flex: "0 0 52px",
@@ -324,14 +348,14 @@ function Hook({ t }: { t: number }) {
           </div>
         </Abs>
       ))}
-      <Abs x={160} y={310} w={960} h={290} style={{ ...panel, padding: "28px 40px", ...fade(t, 5) }}>
+      <Abs x={160} y={310} w={960} h={290} style={{ ...panel, padding: "28px 40px", ...fade(t, 8) }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
           <div>
             <Label>Middle credit score</Label>
-            <p style={{ fontFamily: H, fontSize: 80, fontWeight: 800, lineHeight: 1, marginTop: 8 }}>{SCORES_BEFORE[1]}</p>
+            <p style={{ fontFamily: H, fontSize: 80, fontWeight: 800, lineHeight: 1, marginTop: 8, color: C.warn }}>{SCORES_BEFORE[1]}</p>
           </div>
           <div style={{ textAlign: "right" }}>
-            <Label>Lender minimum</Label>
+            <Label>Takeout lender minimum</Label>
             <p style={{ fontFamily: H, fontSize: 80, fontWeight: 800, lineHeight: 1, marginTop: 8, color: C.deep }}>{MINIMUM}</p>
           </div>
         </div>
@@ -362,69 +386,95 @@ function Hook({ t }: { t: number }) {
             }}
           />
         </div>
-        <div style={{ textAlign: "center", marginTop: 14, ...fade(t, 6.5) }}>
-          <Pill tone="warn">Just below the minimum: {MINIMUM - SCORES_BEFORE[1]} points short</Pill>
+        <div style={{ textAlign: "center", marginTop: 14, ...fade(t, 9.8) }}>
+          <Pill tone="warn">Just short of qualifying: {MINIMUM - SCORES_BEFORE[1]} points</Pill>
         </div>
       </Abs>
-    </>
-  );
-}
 
-function PlanB({ t }: { t: number }) {
-  const ifNot = [
-    "The score lands lower than projected, or income, value or rates change",
-    "The bridge stays a fully amortizing second mortgage",
-    "It was underwritten so the borrower can afford it on its own",
-    "The refinance can be revisited once conditions are met",
-  ];
-  return (
-    <>
-      <Header t={t} a={0} eyebrow="Know the risk" title="Conditional approval isn’t a guarantee" />
-      <Abs x={60} y={140} w={470} h={330} style={{ ...panel, borderTop: `6px solid ${C.teal}`, ...fade(t, 0.6) }}>
-        <Label>If the conditions are met</Label>
-        <p style={{ fontFamily: H, fontSize: 26, fontWeight: 800, marginTop: 14, lineHeight: 1.3 }}>
-          The refinance closes and pays off the bridge.
-        </p>
-        <p style={{ fontSize: 17, color: C.body, marginTop: 14, lineHeight: 1.5 }}>
-          That’s the plan for every file, and why the takeout lender reviews it before EquiBridge funds.
-        </p>
-      </Abs>
-      <Abs x={560} y={140} w={660} h={330} style={{ ...panel, borderTop: `6px solid ${C.warn}`, ...fade(t, 3.2) }}>
-        <Label style={{ color: C.warn }}>If they aren’t</Label>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 16 }}>
-          {ifNot.map((line, k) => (
-            <div key={line} style={{ display: "flex", gap: 12, alignItems: "flex-start", fontSize: 18, lineHeight: 1.4, ...fade(t, 3.8 + k * 0.6) }}>
-              <span style={{ flex: "0 0 10px", height: 10, borderRadius: 999, background: C.teal, marginTop: 8 }} />
-              {line}
-            </div>
-          ))}
+      {/* Phase B: the reason code */}
+      {dim > 0 ? <div style={{ position: "absolute", inset: 0, background: `rgba(242,248,251,${0.88 * dim})`, backdropFilter: `blur(${3 * dim}px)` }} /> : null}
+      {card > 0 ? (
+        <Abs
+          x={140}
+          y={150}
+          w={1000}
+          h={340}
+          style={{
+            ...panel,
+            padding: "30px 44px",
+            border: `2px solid ${C.warn}`,
+            boxShadow: "0 24px 60px rgba(15,76,92,0.18)",
+            opacity: card,
+            transform: `scale(${0.92 + 0.08 * card})`,
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Label style={{ color: C.warn }}>Credit report · Key score factor</Label>
+            <span style={{ fontSize: 15, color: C.muted }}>Sample Borrower · Bureau 2</span>
+          </div>
+          <div style={{ height: 1, background: C.line, margin: "16px 0 26px" }} />
+          <p style={{ fontSize: 18, color: C.muted }}>Factor 1 of 4</p>
+          <p style={{ fontFamily: H, fontSize: 40, fontWeight: 800, lineHeight: 1.25, marginTop: 8, position: "relative", display: "inline" }}>
+            <span
+              style={{
+                backgroundImage: `linear-gradient(${C.warnBg}, ${C.warnBg})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: `${mark * 100}% 100%`,
+                padding: "2px 6px",
+                boxDecorationBreak: "clone",
+                WebkitBoxDecorationBreak: "clone",
+              }}
+            >
+              “{REASON}.”
+            </span>
+          </p>
+          <div style={{ display: "flex", gap: 14, marginTop: 30, ...fade(t, 14.6) }}>
+            <Pill tone="warn">Revolving utilization: 95%</Pill>
+            <Pill tone="info">The only thing holding the score down</Pill>
+          </div>
+        </Abs>
+      ) : null}
+
+      {/* Phase C: “What if…” */}
+      {wipe > 0 ? (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: `linear-gradient(135deg, ${C.deep} 0%, ${C.teal} 70%, #227c84 100%)`,
+            clipPath: `inset(0 0 0 ${(1 - wipe) * 100}%)`,
+          }}
+        >
+          <div style={{ position: "absolute", left: 120, top: 120, width: 1040 }}>
+            <p style={{ fontFamily: H, fontSize: 22, fontWeight: 700, letterSpacing: 4, textTransform: "uppercase", color: C.aqua, ...fade(t, 17.3) }}>
+              What if…
+            </p>
+            <p style={{ fontFamily: H, fontSize: 44, fontWeight: 800, lineHeight: 1.25, color: "#fff", marginTop: 18, ...fade(t, 17.6, 0.8) }}>
+              …paying down those cards could unlock the refinance?
+            </p>
+            <p style={{ fontFamily: H, fontSize: 44, fontWeight: 800, lineHeight: 1.25, color: C.mint, marginTop: 28, ...fade(t, 22, 0.8) }}>
+              …and the takeout lender could project the improvement before a single dollar is funded?
+            </p>
+          </div>
+          <div style={{ position: "absolute", left: 0, top: 540, width: 1280, display: "flex", justifyContent: "center", alignItems: "center", gap: 14, ...fade(t, 25.6) }}>
+            <span style={{ height: 2, width: 80, background: C.aqua }} />
+            <span style={{ fontFamily: H, fontSize: 20, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#fff" }}>Here’s how EquiBridge works</span>
+            <span style={{ height: 2, width: 80, background: C.aqua }} />
+          </div>
         </div>
-      </Abs>
-      <div style={{ position: "absolute", left: 0, top: 510, width: 1280, textAlign: "center", ...fade(t, 6.2) }}>
-        <Pill tone="info">Every bridge is underwritten for ability to repay, without assuming the refinance closes</Pill>
-      </div>
+      ) : null}
     </>
   );
-}
-
-function Scene({ t, i, children }: { t: number; i: number; children: React.ReactNode }) {
-  const s = SCENES[i];
-  const last = i === SCENES.length - 1;
-  const inScene = t >= s.start && (last ? t <= s.end : t < s.end);
-  if (!inScene) return null;
-  const fadeIn = i === 0 ? 1 : at(t, s.start, 0.6);
-  const fadeOut = last ? 1 : 1 - prog(t, s.end - 0.5, 0.5);
-  return <div style={{ position: "absolute", inset: 0, opacity: fadeIn * fadeOut }}>{children}</div>;
 }
 
 function S1({ t }: { t: number }) {
-  const fills = ACCOUNTS.map((_, k) => at(t, 3.6 + k * 0.35, 1.4));
+  const fills = ACCOUNTS.map((_, k) => at(t, 1.3 + k * 0.3, 1.3));
   const overall = ACCOUNTS.reduce((s, a, k) => s + a.bal * fills[k], 0) / LIMIT_TOTAL;
-  const clean = ["0 late payments", "No collections", "No liens or judgments", "No bankruptcies"];
+  const clean = ["No late payments", "No collections", "No derogatory items", "No public records"];
   return (
     <>
       <Header t={t} a={0} eyebrow="Step 1 · The “almost” file" title="Sample Borrower’s credit report" />
-      <Abs x={60} y={130} w={540} h={480} style={{ ...panel, ...fade(t, 0.3) }}>
+      <Abs x={60} y={130} w={540} h={480} style={{ ...panel, ...fade(t, 0.2) }}>
         <Label>Credit scores · tri-merge report</Label>
         <div style={{ display: "flex", gap: 16, marginTop: 18 }}>
           {SCORES_BEFORE.map((s, k) => {
@@ -437,7 +487,7 @@ function S1({ t }: { t: number }) {
                   height: 118,
                   borderRadius: 14,
                   background: mid ? C.tint : C.bg,
-                  border: `3px solid ${mid && t >= 9 ? C.deep : "transparent"}`,
+                  border: `3px solid ${mid && t >= 7 ? C.deep : "transparent"}`,
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -450,7 +500,7 @@ function S1({ t }: { t: number }) {
             );
           })}
         </div>
-        <p style={{ marginTop: 12, fontSize: 17, fontWeight: 700, color: C.teal, textAlign: "center", ...fade(t, 9) }}>
+        <p style={{ marginTop: 12, fontSize: 17, fontWeight: 700, color: C.teal, textAlign: "center", ...fade(t, 7) }}>
           ▲ The middle score is the one lenders use
         </p>
         <div
@@ -462,18 +512,18 @@ function S1({ t }: { t: number }) {
             padding: "12px 18px",
             background: C.bg,
             borderRadius: 12,
-            ...fade(t, 11),
+            ...fade(t, 8.6),
           }}
         >
           <span style={{ fontSize: 18 }}>
-            Program minimum <b style={{ fontFamily: H }}>{MINIMUM}</b>
+            Takeout lender minimum <b style={{ fontFamily: H }}>{MINIMUM}</b>
           </span>
           <Pill tone="warn">{MINIMUM - SCORES_BEFORE[1]} points short</Pill>
         </div>
-        <Label style={{ marginTop: 24 }}>Payment history &amp; public records</Label>
+        <Label style={{ marginTop: 24 }}>Payment history &amp; derogatory items</Label>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 16px", marginTop: 12 }}>
           {clean.map((c, k) => (
-            <div key={c} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 17, ...fade(t, 8 + k * 0.35) }}>
+            <div key={c} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 17, ...fade(t, 5.2 + k * 0.3) }}>
               <Check />
               {c}
             </div>
@@ -481,7 +531,7 @@ function S1({ t }: { t: number }) {
         </div>
       </Abs>
 
-      <Abs x={640} y={130} w={580} h={480} style={{ ...panel, ...fade(t, 2.5) }}>
+      <Abs x={640} y={130} w={580} h={480} style={{ ...panel, ...fade(t, 0.8) }}>
         <Label>Revolving accounts</Label>
         <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 18 }}>
           {ACCOUNTS.map((a, k) => (
@@ -516,19 +566,19 @@ function S1({ t }: { t: number }) {
 }
 
 function S2({ t }: { t: number }) {
-  const s0 = 14;
-  const drops = ACCOUNTS.map((_, k) => at(t, s0 + 4 + k * 0.4, 1.6));
+  const drops = ACCOUNTS.map((_, k) => at(t, 3.4 + k * 0.35, 1.4));
   const bals = ACCOUNTS.map((a, k) => lerp(a.bal, a.target, drops[k]));
   const overall = bals.reduce((s, b) => s + b, 0) / LIMIT_TOTAL;
-  const score = Math.round(lerp(SCORES_BEFORE[1], SCORES_AFTER[1], at(t, s0 + 8, 2.5)));
+  const score = Math.round(lerp(SCORES_BEFORE[1], SCORES_AFTER[1], at(t, 7.6, 2.2)));
+  const gain = score - SCORES_BEFORE[1];
   const lo = 550;
   const hi = 700;
   const trackW = 470;
   const xOf = (v: number) => ((v - lo) / (hi - lo)) * trackW;
   return (
     <>
-      <Header t={t} a={s0} eyebrow="Step 2 · At the takeout lender" title="Score simulator: what if the balances drop?" />
-      <Abs x={60} y={130} w={600} h={480} style={{ ...panel, ...fade(t, s0 + 0.3) }}>
+      <Header t={t} a={0} eyebrow="Step 2 · At the takeout lender" title="Score simulation: what if the balances drop?" />
+      <Abs x={60} y={130} w={600} h={480} style={{ ...panel, ...fade(t, 0.3) }}>
         <Label>Simulated payoff</Label>
         <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 18 }}>
           {ACCOUNTS.map((a, k) => {
@@ -567,13 +617,13 @@ function S2({ t }: { t: number }) {
         </div>
       </Abs>
 
-      <Abs x={690} y={130} w={530} h={480} style={{ ...panel, ...fade(t, s0 + 1.5) }}>
-        <Label>Projected middle score (estimate)</Label>
-        <p style={{ fontFamily: H, fontSize: 104, fontWeight: 800, lineHeight: 1, marginTop: 22, color: score >= MINIMUM ? C.deep : C.navy }}>
-          {score}
-        </p>
-        <p style={{ fontSize: 16, color: C.muted, marginTop: 6 }}>Simulator estimate only. Not a guaranteed result.</p>
-        <div style={{ position: "relative", marginTop: 46, width: trackW, height: 60 }}>
+      <Abs x={690} y={130} w={530} h={480} style={{ ...panel, ...fade(t, 1.2) }}>
+        <Label>Projected middle score · hypothetical</Label>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 18, marginTop: 18 }}>
+          <p style={{ fontFamily: H, fontSize: 104, fontWeight: 800, lineHeight: 1, color: score >= MINIMUM ? C.deep : C.navy }}>{score}</p>
+          {gain > 0 ? <span style={{ fontFamily: H, fontSize: 34, fontWeight: 800, color: C.ok }}>+{gain}</span> : null}
+        </div>
+        <div style={{ position: "relative", marginTop: 44, width: trackW, height: 60 }}>
           <div
             style={{
               position: "absolute",
@@ -605,66 +655,152 @@ function S2({ t }: { t: number }) {
           <span style={{ position: "absolute", left: 0, top: 44, fontSize: 14, color: C.muted }}>{lo}</span>
           <span style={{ position: "absolute", right: 0, top: 44, fontSize: 14, color: C.muted }}>{hi}</span>
         </div>
-        <div style={{ marginTop: 22, ...fade(t, s0 + 11) }}>
-          <Pill tone="ok">Projected to clear {MINIMUM}</Pill>
+        <div style={{ marginTop: 24, ...fade(t, 9.4) }}>
+          <Pill tone="ok" style={{ fontSize: 20, padding: "10px 20px" }}>
+            {SCORES_AFTER[1] - SCORES_BEFORE[1]}-Point Projected Improvement
+          </Pill>
         </div>
-        <p style={{ fontSize: 14, color: C.muted, marginTop: 18 }}>Simulation includes the new bridge loan and its credit inquiry.</p>
+        <p style={{ fontSize: 14, color: C.muted, marginTop: 18, lineHeight: 1.5, ...fade(t, 9.8) }}>
+          Simulation performed or accepted by the takeout lender. Hypothetical illustration, not an actual scoring result.
+        </p>
       </Abs>
     </>
   );
 }
 
 function S3({ t }: { t: number }) {
-  const s0 = 28;
-  const credX = [70, 365, 660, 955];
-  const ex = 1060;
-  const ey = 292;
+  const flow = [
+    { x: 60, title: "Takeout lender underwriting", sub: "Full file reviewed", a: 0.8 },
+    { x: 475, title: "Conditional approval", sub: "Remaining conditions named", a: 2.2 },
+    { x: 890, title: "EquiBridge funding", sub: "Only after approval", a: 3.6 },
+  ];
+  const accepted = ["Income", "Assets", "Employment", "Appraisal", "Title", "Property documentation"];
+  const unlocked = t >= 13.4;
   return (
     <>
-      <Header t={t} a={s0} eyebrow="Step 3 · Approval first, then the bridge" title="The takeout lender approves, then EquiBridge funds" />
+      <Header t={t} a={0} eyebrow="Step 3 · Conditions first" title="We identify the remaining conditions first" />
       <svg width={1280} height={720} style={{ position: "absolute", inset: 0 }} aria-hidden="true">
-        <Arrow x1={352} y1={220} x2={504} y2={220} p={at(t, s0 + 1.5, 1)} />
-        <Arrow x1={772} y1={220} x2={924} y2={220} p={at(t, s0 + 4.5, 1)} />
+        <Arrow x1={396} y1={190} x2={469} y2={190} p={at(t, 1.6, 0.6)} />
+        <Arrow x1={811} y1={190} x2={884} y2={190} p={at(t, 3, 0.6)} />
+      </svg>
+      {flow.map((f, k) => {
+        const last = k === 2;
+        return (
+          <Node
+            key={f.title}
+            x={f.x}
+            y={135}
+            w={330}
+            h={110}
+            dark={!last || unlocked}
+            title={f.title}
+            sub={last ? (unlocked ? "✓ Conditions confirmed: cleared to fund" : "Waits for the takeout lender’s approval") : f.sub}
+            style={{
+              ...fade(t, f.a),
+              ...(last && !unlocked ? { border: `2px dashed ${C.teal}` } : {}),
+              ...(last && unlocked ? { boxShadow: `0 0 0 6px ${C.mint}, 0 12px 32px rgba(15,76,92,0.18)` } : {}),
+            }}
+          />
+        );
+      })}
+
+      <Abs x={60} y={280} w={680} h={330} style={{ ...panel, ...fade(t, 6.2) }}>
+        <Label>Reviewed &amp; accepted by the takeout lender</Label>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px 20px", marginTop: 20 }}>
+          {accepted.map((c, k) => (
+            <div key={c} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 19, ...fade(t, 6.8 + k * 0.45) }}>
+              <Check />
+              {c}
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: 15, color: C.muted, marginTop: 26, ...fade(t, 9.8) }}>
+          Material underwriting requirements are satisfied before EquiBridge funds a dollar.
+        </p>
+      </Abs>
+
+      <Abs x={770} y={280} w={450} h={330} style={{ ...panel, borderTop: `6px solid ${C.warn}`, ...fade(t, 11.4) }}>
+        <Label style={{ color: C.warn }}>The only barriers left</Label>
+        {[
+          ["1", `Middle FICO of ${MINIMUM} or higher`],
+          ["2", `Designated card payoffs · ${money(PAYOFF)}`],
+        ].map(([n, text], k) => (
+          <div
+            key={n}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              marginTop: k === 0 ? 20 : 14,
+              padding: "14px 16px",
+              borderRadius: 14,
+              background: C.warnBg,
+              fontFamily: H,
+              fontSize: 19,
+              fontWeight: 700,
+              ...fade(t, 11.8 + k * 0.5),
+            }}
+          >
+            <span
+              style={{
+                flex: "0 0 32px",
+                height: 32,
+                borderRadius: 999,
+                background: C.warn,
+                color: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 16,
+              }}
+            >
+              {n}
+            </span>
+            {text}
+          </div>
+        ))}
+        <p style={{ fontSize: 15, color: C.body, marginTop: 18, lineHeight: 1.45, ...fade(t, 13) }}>
+          Confirmed in writing by the takeout lender. The bridge and the rescore are built to clear both.
+        </p>
+      </Abs>
+    </>
+  );
+}
+
+function S4({ t }: { t: number }) {
+  const credX = [70, 365, 660, 955];
+  const ex = 950;
+  const ey = 270;
+  const points = ["No cash to the borrower", "Card balances paid directly", "Payoff amounts & recipients documented", "Funds applied per the approved payoff plan"];
+  return (
+    <>
+      <Header t={t} a={0} eyebrow="Step 4 · Controlled funding" title="Proceeds go to the creditors, not the borrower" />
+      <svg width={1280} height={720} style={{ position: "absolute", inset: 0 }} aria-hidden="true">
+        <Arrow x1={546} y1={200} x2={734} y2={200} p={at(t, 1.6, 0.9)} />
         {credX.map((x, k) => (
-          <Arrow key={k} x1={ex} y1={ey} x2={x + 127} y2={414} p={at(t, s0 + 7.6 + k * 0.15, 1)} color={C.aqua} />
+          <Arrow key={k} x1={ex} y1={ey} x2={x + 127} y2={340} p={at(t, 3.8 + k * 0.12, 0.8)} color={C.aqua} />
         ))}
       </svg>
-      <span style={{ position: "absolute", left: 352, top: 182, width: 152, textAlign: "center", fontSize: 15, fontWeight: 700, color: C.teal, ...fade(t, s0 + 2) }}>
-        Bridge request
-      </span>
-      <span style={{ position: "absolute", left: 772, top: 182, width: 152, textAlign: "center", fontSize: 15, fontWeight: 700, color: C.teal, ...fade(t, s0 + 5) }}>
-        Loan proceeds
+      <span style={{ position: "absolute", left: 546, top: 160, width: 188, textAlign: "center", fontFamily: H, fontSize: 20, fontWeight: 800, color: C.deep, ...fade(t, 2) }}>
+        {money(PAYOFF)}
       </span>
       <Node
-        x={90}
-        y={150}
-        h={140}
-        title="Takeout lender"
-        sub={
-          <>
-            ✓ Income, assets, value reviewed
-            <br />
-            <b style={{ color: C.warn }}>Remaining: 620+ middle score</b>
-          </>
-        }
-        style={fade(t, s0 + 0.3)}
-      />
-      <Node
-        x={510}
-        y={150}
+        x={120}
+        y={130}
+        w={420}
         h={140}
         dark
         title="EquiBridge Capital"
-        sub={`Closed-end second mortgage · ${money(PAYOFF)} card payoff`}
-        style={fade(t, s0 + 2.6)}
+        sub="Short-term, interest-only, closed-end second mortgage · 12 months or less"
+        style={fade(t, 0.2)}
       />
-      <Node x={930} y={150} h={140} title="Escrow" sub="Pays each card company directly" style={fade(t, s0 + 5.5)} />
+      <Node x={740} y={130} w={420} h={140} title="Escrow" sub="Disburses directly to each designated creditor, per the approved payoff plan" style={fade(t, 2.4)} />
 
       {ACCOUNTS.map((a, k) => {
-        const travel = prog(t, s0 + 8.8 + k * 0.25, 1.4);
+        const travel = prog(t, 4.8 + k * 0.25, 1.3);
         const dx = lerp(ex, credX[k] + 127, ease(travel));
-        const dy = lerp(ey, 414, ease(travel));
-        const paid = t >= s0 + 10.3 + k * 0.25;
+        const dy = lerp(ey, 345, ease(travel));
+        const paid = t >= 6.1 + k * 0.25;
         return (
           <div key={a.name}>
             {travel > 0 && travel < 1 ? (
@@ -689,10 +825,10 @@ function S3({ t }: { t: number }) {
                 $
               </div>
             ) : null}
-            <Abs x={credX[k]} y={420} w={255} h={140} style={{ ...panel, padding: "18px 20px", ...fade(t, s0 + 6.8 + k * 0.15) }}>
+            <Abs x={credX[k]} y={345} w={255} h={130} style={{ ...panel, padding: "16px 20px", ...fade(t, 3.4 + k * 0.12) }}>
               <p style={{ fontFamily: H, fontSize: 18, fontWeight: 700 }}>{a.name}</p>
-              <p style={{ fontSize: 15, color: C.body, marginTop: 4 }}>Paid {money(a.bal - a.target)}</p>
-              <div style={{ marginTop: 12 }}>
+              <p style={{ fontSize: 15, color: C.body, marginTop: 4 }}>Paid directly: {money(a.bal - a.target)}</p>
+              <div style={{ marginTop: 10 }}>
                 {paid ? (
                   <Pill tone="ok" style={{ fontSize: 15, padding: "6px 12px" }}>
                     {a.target === 0 ? "✓ Balance $0" : `✓ Down to ${money(a.target)}`}
@@ -707,39 +843,37 @@ function S3({ t }: { t: number }) {
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: 0, top: 584, width: 1280, display: "flex", justifyContent: "center", gap: 14 }}>
-        <Pill tone="info" style={fade(t, s0 + 4)}>
-          Funded only after the takeout lender’s conditional approval
-        </Pill>
-        <Pill tone="info" style={fade(t, s0 + 11.5)}>
-          No cash to the borrower
-        </Pill>
+      <div style={{ position: "absolute", left: 90, top: 502, width: 1100, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12 }}>
+        {points.map((p, k) => (
+          <Pill key={p} tone="info" style={{ fontSize: 16, padding: "8px 16px", ...fade(t, 9 + k * 0.45) }}>
+            ✓ {p}
+          </Pill>
+        ))}
       </div>
     </>
   );
 }
 
-function S4({ t }: { t: number }) {
-  const s0 = 43;
+function S5({ t }: { t: number }) {
   const rowY = [140, 216, 292, 368];
   const bY = [140, 238, 336];
   const vx = 520;
   const vy = 200;
-  const tl = prog(t, s0 + 4, 8);
+  const tl = prog(t, 2.4, 5);
   const marks = [
-    { p: 0, label: "Day 1 · Balance letters requested" },
-    { p: 0.45, label: "Rescore submitted" },
-    { p: 0.95, label: "Days 7–14 · Bureaus update" },
+    { p: 0, label: "Proof of new balances" },
+    { p: 0.45, label: "Rapid rescore requested" },
+    { p: 0.95, label: "About 1–2 weeks · Bureaus update" },
   ];
   return (
     <>
-      <Header t={t} a={s0} eyebrow="Step 4 · Rapid rescore" title="Proof of the new balances goes to the bureaus" />
+      <Header t={t} a={0} eyebrow="Step 5 · Rapid rescore" title="Proof of the new balances goes to the bureaus" />
       <svg width={1280} height={720} style={{ position: "absolute", inset: 0 }} aria-hidden="true">
         {rowY.map((y, k) => (
-          <Arrow key={k} x1={334} y1={y + 31} x2={514} y2={275} p={at(t, s0 + 1.4 + k * 0.15, 0.8)} color={C.aqua} />
+          <Arrow key={k} x1={334} y1={y + 31} x2={514} y2={275} p={at(t, 0.8 + k * 0.1, 0.6)} color={C.aqua} />
         ))}
         {bY.map((y, k) => (
-          <Arrow key={k} x1={784} y1={275} x2={954} y2={y + 42} p={at(t, s0 + 5 + k * 0.15, 0.8)} />
+          <Arrow key={k} x1={784} y1={275} x2={954} y2={y + 42} p={at(t, 3 + k * 0.12, 0.6)} />
         ))}
       </svg>
       {ACCOUNTS.map((a, k) => (
@@ -749,57 +883,40 @@ function S4({ t }: { t: number }) {
           y={rowY[k]}
           w={270}
           h={62}
-          style={{ ...panel, padding: "10px 16px", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "space-between", ...fade(t, s0 + 0.3 + k * 0.15) }}
+          style={{ ...panel, padding: "10px 16px", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "space-between", ...fade(t, 0.2 + k * 0.1) }}
         >
           <span style={{ fontFamily: H, fontSize: 17, fontWeight: 700 }}>{a.name}</span>
           <span style={{ fontSize: 16, fontWeight: 700, color: C.ok }}>{money(a.target)}</span>
         </Abs>
       ))}
       {ACCOUNTS.map((_, k) => {
-        const p = prog(t, s0 + 2.2 + k * 0.3, 1.5);
-        return (
-          <Doc
-            key={k}
-            x={lerp(334, 514, ease(p))}
-            y={lerp(rowY[k] + 31, 275, ease(p))}
-            opacity={p > 0 && p < 1 ? 1 : 0}
-          />
-        );
+        const p = prog(t, 1.2 + k * 0.2, 1.1);
+        return <Doc key={k} x={lerp(334, 514, ease(p))} y={lerp(rowY[k] + 31, 275, ease(p))} opacity={p > 0 && p < 1 ? 1 : 0} />;
       })}
       <Node
         x={vx}
         y={vy}
         w={260}
         h={150}
-        title="Takeout lender’s credit vendor"
-        sub="Rapid rescore submitted with the updated balance letters"
-        style={{ border: `2px solid ${C.deep}`, ...fade(t, s0 + 1.2) }}
+        title="Takeout lender"
+        sub="Requests a rapid rescore through its authorized credit reporting process"
+        style={{ border: `2px solid ${C.deep}`, ...fade(t, 0.6) }}
       />
-      <div style={{ position: "absolute", left: vx, top: 364, width: 260, textAlign: "center", ...fade(t, s0 + 4.5) }}>
-        <Pill tone="info" style={{ fontSize: 14, padding: "6px 12px" }}>
-          Ordered &amp; paid for by the lender
-        </Pill>
-      </div>
       {bY.map((y, k) => {
-        const done = t >= s0 + 10 + k * 0.4;
+        const done = t >= 6.4 + k * 0.3;
         return (
-          <Abs
-            key={k}
-            x={960}
-            y={y}
-            w={260}
-            h={84}
-            style={{ ...panel, padding: "14px 18px", borderRadius: 14, ...fade(t, s0 + 5.4 + k * 0.15) }}
-          >
+          <Abs key={k} x={960} y={y} w={260} h={84} style={{ ...panel, padding: "14px 18px", borderRadius: 14, ...fade(t, 3.2 + k * 0.12) }}>
             <p style={{ fontFamily: H, fontSize: 18, fontWeight: 700 }}>Credit bureau {k + 1}</p>
             <p style={{ fontSize: 15, fontWeight: 700, marginTop: 4, color: done ? C.ok : C.muted }}>{done ? "✓ Updated" : "Updating…"}</p>
           </Abs>
         );
       })}
-      <Abs x={80} y={450} w={1120} h={160} style={{ ...panel, padding: "22px 32px", ...fade(t, s0 + 3.5) }}>
+      <Abs x={80} y={450} w={1120} h={160} style={{ ...panel, padding: "22px 32px", ...fade(t, 2) }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-          <Label>Typical timeline</Label>
-          <span style={{ fontFamily: H, fontSize: 26, fontWeight: 800, color: C.deep }}>About 1–2 weeks</span>
+          <Label>Illustrative timeline</Label>
+          <span style={{ fontFamily: H, fontSize: 26, fontWeight: 800, color: C.deep }}>
+            About 1–2 weeks <span style={{ fontSize: 15, fontWeight: 600, color: C.muted }}>· not guaranteed</span>
+          </span>
         </div>
         <div style={{ position: "relative", marginTop: 20, height: 70 }}>
           <div style={{ position: "absolute", left: 0, right: 0, top: 6, height: 12, borderRadius: 999, background: C.tint }} />
@@ -850,13 +967,12 @@ function S4({ t }: { t: number }) {
   );
 }
 
-function S5({ t }: { t: number }) {
-  const s0 = 57;
-  const up = at(t, s0 + 0.8, 2.8);
+function S6({ t }: { t: number }) {
+  const up = at(t, 0.3, 2.2);
   const xs = [145, 505, 865];
   return (
     <>
-      <Header t={t} a={s0} eyebrow="Step 5 · Score updated" title="The update clears the remaining condition" />
+      <Header t={t} a={0} eyebrow="Step 6 · Score updated" title="The remaining conditions clear. The refinance closes." />
       {SCORES_BEFORE.map((b, k) => {
         const mid = k === 1;
         const v = Math.round(lerp(b, SCORES_AFTER[k], up));
@@ -864,9 +980,9 @@ function S5({ t }: { t: number }) {
           <Abs
             key={k}
             x={xs[k]}
-            y={140}
+            y={135}
             w={270}
-            h={170}
+            h={165}
             style={{
               ...panel,
               display: "flex",
@@ -875,7 +991,7 @@ function S5({ t }: { t: number }) {
               justifyContent: "center",
               border: mid ? `3px solid ${C.deep}` : `1px solid ${C.line}`,
               background: mid ? C.tint : "#fff",
-              ...fade(t, s0 + 0.2 + k * 0.1),
+              ...fade(t, 0.1 + k * 0.08),
             }}
           >
             <span style={{ fontSize: 17, color: C.muted }}>{mid ? "Bureau 2 · middle score" : `Bureau ${k + 1}`}</span>
@@ -883,128 +999,129 @@ function S5({ t }: { t: number }) {
           </Abs>
         );
       })}
-      <div style={{ position: "absolute", left: 0, top: 340, width: 1280, display: "flex", justifyContent: "center", gap: 16, ...fade(t, s0 + 4) }}>
+      <div style={{ position: "absolute", left: 0, top: 324, width: 1280, display: "flex", justifyContent: "center", gap: 14, ...fade(t, 2.3) }}>
         <Pill tone="warn">Before: {SCORES_BEFORE[1]}</Pill>
         <span style={{ fontFamily: H, fontSize: 24, fontWeight: 800, color: C.teal, alignSelf: "center" }}>→</span>
-        <Pill tone="info">Actual: {SCORES_AFTER[1]}</Pill>
-        <Pill tone="ok">✓ Condition cleared: {MINIMUM}+</Pill>
+        <Pill tone="info">Updated: {SCORES_AFTER[1]}</Pill>
+        <Pill tone="ok">+{SCORES_AFTER[1] - SCORES_BEFORE[1]} points · {MINIMUM}+ cleared</Pill>
       </div>
-      <p style={{ position: "absolute", left: 0, top: 392, width: 1280, textAlign: "center", fontSize: 15, color: C.muted, ...fade(t, s0 + 4.5) }}>
-        Illustrative example: actual results can come in higher or lower than the projection.
+      <p style={{ position: "absolute", left: 0, top: 376, width: 1280, textAlign: "center", fontSize: 15, color: C.muted, ...fade(t, 2.6) }}>
+        Hypothetical illustration, not an actual scoring result. Real results can come in higher or lower.
       </p>
       <svg width={1280} height={720} style={{ position: "absolute", inset: 0 }} aria-hidden="true">
-        <Arrow x1={594} y1={480} x2={684} y2={480} p={at(t, s0 + 6.4, 0.8)} />
+        <Arrow x1={594} y1={470} x2={684} y2={470} p={at(t, 4.2, 0.6)} />
       </svg>
-      <Node x={260} y={425} w={330} h={110} dark title="Refinance closes" sub="The takeout lender funds the permanent loan" style={fade(t, s0 + 5.4)} />
-      <Node x={690} y={425} w={330} h={110} title="Bridge paid off" sub="From the refinance proceeds" style={fade(t, s0 + 7.2)} />
-      <div style={{ position: "absolute", left: 0, top: 568, width: 1280, textAlign: "center", ...fade(t, s0 + 8.4) }}>
-        <Pill tone="ok">✓ Process complete</Pill>
+      <Node x={260} y={415} w={330} h={110} dark title="Refinance closes" sub="The takeout lender funds the permanent loan" style={fade(t, 3.5)} />
+      <Node x={690} y={415} w={330} h={110} title="Bridge paid off" sub="The EquiBridge second mortgage is repaid at closing" style={fade(t, 4.7)} />
+      <div style={{ position: "absolute", left: 0, top: 556, width: 1280, textAlign: "center", ...fade(t, 5.6) }}>
+        <Pill tone="ok">✓ Refinance-ready, and refinanced</Pill>
       </div>
     </>
   );
 }
 
-function Icon({ kind }: { kind: "home" | "lender" | "bridge" }) {
-  const paths = {
-    home: (
-      <>
-        <path d="M3 11l9-7 9 7" />
-        <path d="M5 10v10h14V10" />
-        <path d="M10 20v-6h4v6" />
-      </>
-    ),
-    lender: (
-      <>
-        <rect x="3" y="7" width="18" height="13" rx="2" />
-        <path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" />
-        <path d="M3 13h18" />
-      </>
-    ),
-    bridge: (
-      <>
-        <path d="M2 17h20" />
-        <path d="M5 17V9M19 17V9" />
-        <path d="M5 9c3 4 11 4 14 0" />
-        <path d="M9 17v-4M12 17v-3M15 17v-4" />
-      </>
-    ),
-  }[kind];
+function Risk({ t }: { t: number }) {
+  const tiles = [
+    { title: "Conditional approval", text: "Conditions or circumstances can change before closing." },
+    { title: "Score projection", text: "An estimate. Actual updated scores can come in lower." },
+    { title: "Rapid rescore", text: "Timing and results depend on the bureaus and creditors." },
+  ];
+  const facts = ["Short-term, interest-only second mortgage", "Term of 12 months or less", "Repayment risk evaluated on every loan"];
   return (
-    <div style={{ width: 64, height: 64, borderRadius: 999, background: C.mint, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke={C.deep} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        {paths}
-      </svg>
-    </div>
+    <>
+      <Header t={t} a={0} eyebrow="Know the risk" title="None of these steps guarantees the refinance" />
+      {tiles.map((tile, k) => (
+        <Abs key={tile.title} x={60 + k * 400} y={130} w={360} h={176} style={{ ...panel, padding: 24, ...fade(t, 0.3 + k * 0.5) }}>
+          <p style={{ fontFamily: H, fontSize: 22, fontWeight: 800 }}>{tile.title}</p>
+          <p style={{ fontSize: 16, lineHeight: 1.45, color: C.body, marginTop: 8 }}>{tile.text}</p>
+          <div style={{ marginTop: 12, ...fade(t, 1.6 + k * 0.4) }}>
+            <Pill tone="warn" style={{ fontSize: 15, padding: "6px 12px" }}>
+              Not a guarantee
+            </Pill>
+          </div>
+        </Abs>
+      ))}
+      <Abs x={60} y={336} w={1160} h={270} style={{ ...panel, borderLeft: `8px solid ${C.teal}`, padding: "28px 36px", ...fade(t, 3.8) }}>
+        <Label>The bridge has to stand on its own</Label>
+        <p style={{ fontFamily: H, fontSize: 28, fontWeight: 800, lineHeight: 1.3, marginTop: 12 }}>
+          Every EquiBridge loan must independently satisfy applicable legal, underwriting, and repayment requirements.
+        </p>
+        <p style={{ fontSize: 17, color: C.body, marginTop: 10, ...fade(t, 4.6) }}>
+          An expected refinance never replaces evaluating the borrower’s repayment risk.
+        </p>
+        <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
+          {facts.map((f, k) => (
+            <Pill key={f} tone="info" style={{ fontSize: 15, padding: "7px 14px", ...fade(t, 5.2 + k * 0.35) }}>
+              {f}
+            </Pill>
+          ))}
+        </div>
+      </Abs>
+    </>
   );
 }
 
-function S6({ t }: { t: number }) {
-  // Local clock: 0 = start of this scene.
-  const tiles: { icon: "home" | "lender" | "bridge"; title: string; text: string; a: number }[] = [
-    { icon: "lender", title: "Broker or lender", text: "Turns an “almost” file into a refinance-ready file, and keeps the client.", a: 4.2 },
-    { icon: "home", title: "Homeowner", text: "Gets the loan, or better terms, that high card balances were blocking.", a: 4.8 },
-    { icon: "bridge", title: "EquiBridge", text: "Funds only after takeout approval, underwritten to be repaid either way.", a: 5.4 },
-  ];
+function Close({ t }: { t: number }) {
   return (
     <>
-      <Abs x={60} y={32} w={1160} style={fade(t, 0)}>
-        <Label>Our approach</Label>
-        <h3 style={{ fontFamily: H, fontSize: 34, fontWeight: 800, color: C.navy, marginTop: 6 }}>
-          We don’t simply provide bridge financing.
-        </h3>
-        <p style={{ fontFamily: H, fontSize: 24, fontWeight: 700, color: C.teal, marginTop: 10, ...fade(t, 3) }}>
-          We help turn a qualified, credit-constrained borrower into a refinance-ready borrower.
-        </p>
-      </Abs>
-      {tiles.map((tile, k) => (
-        <Abs key={tile.title} x={60 + k * 400} y={190} w={360} h={214} style={{ ...panel, padding: 24, ...fade(t, tile.a) }}>
-          <Icon kind={tile.icon} />
-          <p style={{ fontFamily: H, fontSize: 22, fontWeight: 800, marginTop: 14 }}>{tile.title}</p>
-          <p style={{ fontSize: 17, lineHeight: 1.45, color: C.body, marginTop: 6 }}>{tile.text}</p>
-        </Abs>
-      ))}
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 432,
-          width: 1280,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 20,
-          ...fade(t, 8),
-        }}
-      >
-        <Image src="/logo-mark.png" alt="" width={174} height={60} loading="eager" />
+      <div style={{ position: "absolute", left: 0, top: 70, width: 1280, display: "flex", justifyContent: "center", alignItems: "center", gap: 24, ...fade(t, 0.1, 0.8) }}>
+        <Image src="/logo-mark.png" alt="" width={232} height={80} loading="eager" />
         <div>
-          <p style={{ fontFamily: H, fontSize: 34, fontWeight: 800, lineHeight: 1 }}>
+          <p style={{ fontFamily: H, fontSize: 52, fontWeight: 800, lineHeight: 1 }}>
             Equi<span style={{ color: C.teal }}>Bridge</span>{" "}
-            <span style={{ fontSize: 16, letterSpacing: 6, color: C.deep }}>CAPITAL</span>
+            <span style={{ fontSize: 22, letterSpacing: 8, color: C.deep }}>CAPITAL</span>
           </p>
-          <p style={{ fontSize: 18, color: C.body, marginTop: 6 }}>Intelligent Lending. Greater Possibilities.</p>
+          <p style={{ fontSize: 19, color: C.body, marginTop: 8 }}>Intelligent Lending. Greater Possibilities.</p>
         </div>
       </div>
+      <p style={{ position: "absolute", left: 60, top: 196, width: 1160, textAlign: "center", fontFamily: H, fontSize: 27, fontWeight: 800, color: C.teal, ...fade(t, 1.4) }}>
+        Turning credit-constrained borrowers into refinance-ready opportunities.
+      </p>
+      <Abs x={190} y={276} w={900} h={232} style={{ ...panel, textAlign: "center", padding: "32px 48px", borderTop: `6px solid ${C.aqua}`, ...fade(t, 4.8) }}>
+        <p style={{ fontFamily: H, fontSize: 30, fontWeight: 800, lineHeight: 1.3, color: C.navy }}>
+          Have a borrower who qualifies for everything except the credit score?
+        </p>
+        <div style={{ marginTop: 22, ...fade(t, 7) }}>
+          <span
+            style={{
+              display: "inline-block",
+              padding: "14px 30px",
+              borderRadius: 999,
+              background: C.deep,
+              color: "#fff",
+              fontFamily: H,
+              fontSize: 22,
+              fontWeight: 800,
+              boxShadow: "0 10px 24px rgba(15,76,92,0.25)",
+            }}
+          >
+            Let’s see if EquiBridge can help →
+          </span>
+        </div>
+        <p style={{ fontSize: 17, color: C.muted, marginTop: 16, ...fade(t, 7.6) }}>equibridgecapital.com · Submit a Scenario</p>
+      </Abs>
       <p
         style={{
           position: "absolute",
-          left: 140,
-          top: 556,
-          width: 1000,
+          left: 120,
+          top: 538,
+          width: 1040,
           textAlign: "center",
-          fontSize: 14,
+          fontSize: 13,
           lineHeight: 1.5,
           color: C.muted,
-          ...fade(t, 8.6),
+          ...fade(t, 1.8),
         }}
       >
-        Illustrative example with a fictional borrower. Not a commitment to lend. Projected and actual credit scores vary
-        and are not guaranteed. Conditional approval does not guarantee a refinance. All loans are subject to credit
-        approval and underwriting. The bridge loan is secured by the home.
+        Hypothetical example with a fictional borrower; not a guarantee of credit score improvement, underwriting approval, or refinance
+        closing. Projected and updated scores are illustrations, not actual scoring results. Not a commitment to lend. All loans are subject
+        to credit approval, underwriting, and applicable law. The bridge loan is secured by the home.
       </p>
     </>
   );
 }
+
+const SCENE_VIEWS = [Hook, S1, S2, S3, S4, S5, S6, Risk, Close];
 
 function captionAt(t: number) {
   let c = CAPTIONS[0].text;
@@ -1110,33 +1227,14 @@ export default function Explainer({ record = false }: { record?: boolean }) {
           className="xp-canvas"
           style={{ transform: `translate(${box.x}px, ${box.y}px) scale(${box.s})`, opacity: box.s ? 1 : 0 }}
         >
-          <Scene t={t} i={0}>
-            <Hook t={t} />
-          </Scene>
-          <Scene t={t} i={1}>
-            <S1 t={t - HOOK} />
-          </Scene>
-          <Scene t={t} i={2}>
-            <S2 t={t - HOOK} />
-          </Scene>
-          <Scene t={t} i={3}>
-            <S3 t={t - HOOK} />
-          </Scene>
-          <Scene t={t} i={4}>
-            <S4 t={t - HOOK} />
-          </Scene>
-          <Scene t={t} i={5}>
-            <S5 t={t - HOOK} />
-          </Scene>
-          <Scene t={t} i={6}>
-            <PlanB t={t - SCENES[6].start} />
-          </Scene>
-          <Scene t={t} i={7}>
-            <S6 t={t - SCENES[7].start} />
-          </Scene>
+          {SCENE_VIEWS.map((View, i) => (
+            <Scene key={i} t={t} i={i}>
+              {(local) => <View t={local} />}
+            </Scene>
+          ))}
           <span style={{ position: "absolute", right: 60, top: 36 }}>
             <Pill tone="info" style={{ fontSize: 14, padding: "6px 14px" }}>
-              Illustrative example
+              Hypothetical illustration
             </Pill>
           </span>
           <div className="xp-cap-in">{caption}</div>
