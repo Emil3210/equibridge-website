@@ -2,7 +2,8 @@
 Record the How It Works explainer into a 1920x1080 MP4 (silent video track).
 
 Usage (with the site running locally, e.g. `npm run build && npm start`):
-    python3 scripts/record-explainer.py http://localhost:3000 out/explainer_video.mp4 [fps]
+    python3 scripts/record-explainer.py http://localhost:3000 out/explainer_video.mp4 [fps] [path]
+    (path defaults to /explainer; use /process-explainer for The EquiBridge Process video)
 
 It opens /explainer?record=1, steps the animation clock frame by frame with
 window.__ebSeek(seconds), screenshots each frame and pipes the frames into ffmpeg.
@@ -15,11 +16,12 @@ from playwright.sync_api import sync_playwright
 
 base, out = sys.argv[1], sys.argv[2]
 fps = int(sys.argv[3]) if len(sys.argv) > 3 else 30
+path = sys.argv[4] if len(sys.argv) > 4 else "/explainer"
 
 with sync_playwright() as p:
     browser = p.chromium.launch()
     page = browser.new_page(viewport={"width": 1920, "height": 1080}, device_scale_factor=1)
-    page.goto(f"{base}/explainer?record=1", wait_until="networkidle")
+    page.goto(f"{base}{path}?record=1", wait_until="networkidle")
     page.wait_for_function("typeof window.__ebSeek === 'function'")
     page.evaluate("document.fonts.ready")
     duration = page.evaluate("window.__ebDuration")

@@ -59,19 +59,19 @@ export const CAPTIONS = [
   { at: 136.11, text: "Have a borrower who qualifies for everything except the credit score? Let’s see if EquiBridge can help." },
 ];
 
-const ACCOUNTS = [
+export const ACCOUNTS = [
   { name: "Bank card 1", bal: 11640, limit: 12000, target: 0 },
   { name: "Bank card 2", bal: 9310, limit: 10000, target: 0 },
   { name: "Store card", bal: 4850, limit: 5000, target: 0 },
   { name: "Rewards card", bal: 8300, limit: 9000, target: 900 },
 ];
-const SCORES_BEFORE = [584, 592, 601];
-const SCORES_AFTER = [659, 668, 676]; // hypothetical illustration, middle = 668
-const MINIMUM = 620;
-const REASON = "Proportion of balances to credit limits is too high";
+export const SCORES_BEFORE = [584, 592, 601];
+export const SCORES_AFTER = [659, 668, 676]; // hypothetical illustration, middle = 668
+export const MINIMUM = 620;
+export const REASON = "Proportion of balances to credit limits is too high";
 
 // ---------- Helpers ----------
-const C = {
+export const C = {
   navy: "#2b2d42",
   deep: "#0f4c5c",
   teal: "#1b6b73",
@@ -87,24 +87,24 @@ const C = {
   ok: "#17714a",
   okBg: "#e3f5ea",
 };
-const H = "var(--font-heading)";
-const LIMIT_TOTAL = ACCOUNTS.reduce((s, a) => s + a.limit, 0);
-const PAYOFF = ACCOUNTS.reduce((s, a) => s + (a.bal - a.target), 0);
+export const H = "var(--font-heading)";
+export const LIMIT_TOTAL = ACCOUNTS.reduce((s, a) => s + a.limit, 0);
+export const PAYOFF = ACCOUNTS.reduce((s, a) => s + (a.bal - a.target), 0);
 
-const clamp = (x: number) => Math.min(1, Math.max(0, x));
-const prog = (t: number, a: number, d: number) => clamp((t - a) / d);
-const ease = (x: number) => 1 - Math.pow(1 - x, 3);
-const at = (t: number, a: number, d = 0.6) => ease(prog(t, a, d));
-const lerp = (a: number, b: number, x: number) => a + (b - a) * x;
-const money = (n: number) => "$" + Math.round(n).toLocaleString("en-US");
-const pct = (n: number) => `${Math.round(n * 100)}%`;
-const fade = (t: number, a: number, d = 0.6): React.CSSProperties => {
+export const clamp = (x: number) => Math.min(1, Math.max(0, x));
+export const prog = (t: number, a: number, d: number) => clamp((t - a) / d);
+export const ease = (x: number) => 1 - Math.pow(1 - x, 3);
+export const at = (t: number, a: number, d = 0.6) => ease(prog(t, a, d));
+export const lerp = (a: number, b: number, x: number) => a + (b - a) * x;
+export const money = (n: number) => "$" + Math.round(n).toLocaleString("en-US");
+export const pct = (n: number) => `${Math.round(n * 100)}%`;
+export const fade = (t: number, a: number, d = 0.6): React.CSSProperties => {
   const e = at(t, a, d);
   return { opacity: e, transform: `translateY(${(1 - e) * 14}px)` };
 };
-const fmtTime = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+export const fmtTime = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
-const panel: React.CSSProperties = {
+export const panel: React.CSSProperties = {
   background: "#fff",
   border: `1px solid ${C.line}`,
   borderRadius: 20,
@@ -112,7 +112,7 @@ const panel: React.CSSProperties = {
   boxShadow: "0 12px 32px rgba(15,76,92,0.08)",
 };
 
-function Abs({
+export function Abs({
   x,
   y,
   w,
@@ -130,7 +130,7 @@ function Abs({
   return <div style={{ position: "absolute", left: x, top: y, width: w, height: h, boxSizing: "border-box", ...style }}>{children}</div>;
 }
 
-function Label({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
+export function Label({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
     <p style={{ fontSize: 14, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", color: C.teal, ...style }}>
       {children}
@@ -138,7 +138,7 @@ function Label({ children, style }: { children: React.ReactNode; style?: React.C
   );
 }
 
-function Pill({ tone, children, style }: { tone: "warn" | "ok" | "info"; children: React.ReactNode; style?: React.CSSProperties }) {
+export function Pill({ tone, children, style }: { tone: "warn" | "ok" | "info"; children: React.ReactNode; style?: React.CSSProperties }) {
   const colors = {
     warn: [C.warnBg, C.warn],
     ok: [C.okBg, C.ok],
@@ -164,7 +164,7 @@ function Pill({ tone, children, style }: { tone: "warn" | "ok" | "info"; childre
   );
 }
 
-function Header({ t, a, eyebrow, title }: { t: number; a: number; eyebrow: string; title: string }) {
+export function Header({ t, a, eyebrow, title }: { t: number; a: number; eyebrow: string; title: string }) {
   return (
     <Abs x={60} y={32} w={1000} style={fade(t, a)}>
       <Label>{eyebrow}</Label>
@@ -173,7 +173,7 @@ function Header({ t, a, eyebrow, title }: { t: number; a: number; eyebrow: strin
   );
 }
 
-function Bar({ value, color }: { value: number; color: string }) {
+export function Bar({ value, color }: { value: number; color: string }) {
   return (
     <div style={{ height: 10, borderRadius: 999, background: C.tint, overflow: "hidden", marginTop: 8 }}>
       <div style={{ width: `${clamp(value) * 100}%`, height: "100%", borderRadius: 999, background: color }} />
@@ -181,7 +181,7 @@ function Bar({ value, color }: { value: number; color: string }) {
   );
 }
 
-function Arrow({ x1, y1, x2, y2, p, color = C.teal }: { x1: number; y1: number; x2: number; y2: number; p: number; color?: string }) {
+export function Arrow({ x1, y1, x2, y2, p, color = C.teal }: { x1: number; y1: number; x2: number; y2: number; p: number; color?: string }) {
   const len = Math.hypot(x2 - x1, y2 - y1);
   const ang = Math.atan2(y2 - y1, x2 - x1);
   const s = 13;
@@ -210,7 +210,7 @@ function Arrow({ x1, y1, x2, y2, p, color = C.teal }: { x1: number; y1: number; 
   );
 }
 
-function Node({
+export function Node({
   x,
   y,
   w = 260,
@@ -249,7 +249,7 @@ function Node({
   );
 }
 
-function Check({ ok = true }: { ok?: boolean }) {
+export function Check({ ok = true }: { ok?: boolean }) {
   return (
     <span
       style={{
@@ -271,7 +271,7 @@ function Check({ ok = true }: { ok?: boolean }) {
   );
 }
 
-function Doc({ x, y, opacity }: { x: number; y: number; opacity: number }) {
+export function Doc({ x, y, opacity }: { x: number; y: number; opacity: number }) {
   return (
     <div
       style={{

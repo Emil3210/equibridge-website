@@ -87,6 +87,15 @@ p { margin: 0; }
 .main-nav a { font-family: var(--font-heading); font-size: 15px; font-weight: 600; color: var(--navy); text-decoration: none; padding: 8px 0; border-bottom: 3px solid transparent; }
 .main-nav a[aria-current="page"] { color: var(--teal-deep); font-weight: 700; border-bottom-color: var(--aqua); }
 .header-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.nav-menu { position: relative; }
+.nav-menu-btn { font-family: var(--font-heading); font-size: 15px; font-weight: 600; color: var(--navy); background: none; border: none; border-bottom: 3px solid transparent; padding: 8px 0; cursor: pointer; }
+.nav-menu-btn[data-current="true"] { color: var(--teal-deep); font-weight: 700; border-bottom-color: var(--aqua); }
+.nav-menu-btn span { font-size: 12px; margin-left: 2px; }
+.nav-menu-list { position: absolute; left: -16px; top: calc(100% + 8px); z-index: 20; width: 290px; display: flex; flex-direction: column; padding: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 36px rgba(15,76,92,0.14); }
+.main-nav .nav-menu-list a { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 10px; border-bottom: none; }
+.main-nav .nav-menu-list a:hover, .main-nav .nav-menu-list a[aria-current="page"] { background: var(--tint); }
+.nav-menu-label { font-weight: 700; color: var(--navy); }
+.nav-menu-note { font-family: var(--font-body); font-size: 13px; font-weight: 400; color: var(--muted); }
 
 /* Footer */
 .site-footer { background: var(--teal-deep); color: var(--on-dark); }

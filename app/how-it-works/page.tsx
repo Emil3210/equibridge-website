@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import AudienceTabs from "@/components/AudienceTabs";
 
 export const metadata: Metadata = {
@@ -38,6 +39,9 @@ export default async function HowItWorksPage({
           <source src="/videos/equibridge-explainer.mp4" type="video/mp4" />
           Your browser can’t play this video. <a href="/videos/equibridge-explainer.mp4">Download it here</a>.
         </video>
+        <Link href="/process" className="link-arrow" style={{ alignSelf: "flex-start" }}>
+          Brokers &amp; lenders: see the full process, from conditional approval to funding →
+        </Link>
       </div>
       <div className="container stack" style={{ paddingTop: 48 }}>
         <AudienceTabs initial={initial} />

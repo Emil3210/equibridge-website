@@ -10,6 +10,7 @@ Contact and waitlist forms save to the `equibridge-capital` Supabase project.
 | `/` | Home |
 | `/solutions` | Combination Bridge Loan, Scenario Review, Partner Platform, FAQ |
 | `/how-it-works` | Brokers / homeowners toggle (`?view=homeowners` opens the homeowner tab) |
+| `/process` | The EquiBridge Process: partner video (approval to funding), checklist, sample confirmation, broker FAQ |
 | `/about` | Mission, leadership, contact form (`/about#contact`) |
 | `/portal` | Partner portal "opening soon" page with early-access signup |
 | `/privacy`, `/terms`, `/licensing` | Placeholders until counsel drafts the text |
@@ -19,6 +20,8 @@ Contact and waitlist forms save to the `equibridge-capital` Supabase project.
 - Company email, phone, NMLS #, states, review turnaround: `lib/site.ts`
 - Brand colors and fonts: top of `app/globals.css`
 - Header menu: `components/Header.tsx`; footer: `components/Footer.tsx`
+- Process video script and timing: `lib/process-video.ts`; animation: `components/ProcessExplainer.tsx`
+  (record with `python3 scripts/record-explainer.py http://localhost:3000 out/process.mp4 30 /process-explainer`)
 
 ## Local development
 
