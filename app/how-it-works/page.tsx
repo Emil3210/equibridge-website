@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import AudienceTabs from "@/components/AudienceTabs";
-import Explainer from "@/components/Explainer";
 
 export const metadata: Metadata = {
   title: "How It Works",
@@ -26,10 +25,19 @@ export default async function HowItWorksPage({
       </div>
       <div className="container stack" style={{ gap: 18, paddingTop: 56 }}>
         <div className="stack" style={{ gap: 8 }}>
-          <p className="eyebrow">Watch · under 2 minutes</p>
+          <p className="eyebrow">Watch · about 2½ minutes, with sound</p>
           <h2 className="h2">How a bridge makes a credit-constrained borrower refinance-ready</h2>
         </div>
-        <Explainer />
+        <video
+          controls
+          playsInline
+          preload="metadata"
+          poster="/videos/equibridge-explainer-poster.jpg"
+          style={{ width: "100%", aspectRatio: "16 / 9", borderRadius: 16, background: "#0f4c5c", boxShadow: "0 12px 32px rgba(15,76,92,0.12)" }}
+        >
+          <source src="/videos/equibridge-explainer.mp4" type="video/mp4" />
+          Your browser can’t play this video. <a href="/videos/equibridge-explainer.mp4">Download it here</a>.
+        </video>
       </div>
       <div className="container stack" style={{ paddingTop: 48 }}>
         <AudienceTabs initial={initial} />

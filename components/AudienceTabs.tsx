@@ -18,7 +18,7 @@ const BROKER_STEPS: Step[] = [
 const HOME_STEPS: Step[] = [
   { title: "Talk to your loan officer", text: "They review whether card balances are what’s holding your score down." },
   { title: "Share your documents", text: "Income, mortgage and card statements, uploaded securely." },
-  { title: "Your cards are paid off", text: "We pay the card companies directly. You make one monthly payment." },
+  { title: "Your cards are paid off", text: "We pay the card companies directly. You make one interest-only monthly payment until the refinance pays off the bridge." },
   { title: "Your credit updates", text: "The $0 balances report to the credit bureaus over the next few weeks." },
   { title: "Move to your new loan", text: "If it’s better for you, your pre-approved loan replaces the bridge." },
 ];

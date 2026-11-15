@@ -12,7 +12,7 @@ const GLANCE: [string, string][] = [
   ["Lien", "Closed-end second"],
   ["Use of funds", "Revolving debt payoff"],
   ["Typical time to exit", "About 6 weeks"],
-  ["Term", "[15-year amortizing]"],
+  ["Term", "1 year, interest-only; balloon due at maturity"],
   ["Max combined LTV", "[75%]"],
   ["Property", "1-unit, owner-occupied"],
   ["Rate & fees", "[Shown with APR after compliance review]"],
@@ -22,7 +22,7 @@ const REPORT = [
   { title: "Payoff plan", text: "Which balances to pay, and the new monthly payment." },
   { title: "Projected DTI & CLTV", text: "Before and after the bridge, and on the exit loan." },
   { title: "Score sensitivity", text: "An estimated range after payoff, clearly labeled as an estimate." },
-  { title: "Best exit path", text: "Refinance the second, a new first, or keep the bridge." },
+  { title: "Best exit path", text: "Refinance the second or a new first, before the bridge matures." },
 ];
 
 const FAQ = [
@@ -32,7 +32,7 @@ const FAQ = [
   },
   {
     q: "What happens if the exit loan doesn’t close?",
-    a: "The bridge is a fully amortizing loan underwritten to be affordable on its own, so the borrower can simply keep it.",
+    a: "The bridge has a 1-year, interest-only term, with the full balance due as a balloon payment at maturity. That’s why the takeout lender’s conditional approval comes first, and why every bridge is underwritten on its own, including how the balloon would be repaid if the refinance doesn’t close.",
   },
   { q: "Is this a cash-out loan?", a: "No. Loan proceeds go directly to the creditors being paid off." },
   {
@@ -92,7 +92,7 @@ export default function SolutionsPage() {
             <ul className="checklist">
               <li>Funds paid straight to card issuers; no cash to the borrower</li>
               <li>Exit loan conditionally approved before the bridge closes</li>
-              <li>Fully amortizing, so it stays affordable if no exit happens</li>
+              <li>1-year, interest-only term, with a balloon payment due at maturity</li>
               <li>Full income documentation and ability-to-repay review</li>
             </ul>
           </div>

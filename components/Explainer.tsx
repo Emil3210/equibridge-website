@@ -15,7 +15,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export const DURATION = 141.93; // seconds
+export const DURATION = 145.3; // seconds
 
 // ---------- Story content (edit here) ----------
 const SCENES = [
@@ -23,11 +23,11 @@ const SCENES = [
   { start: 27.5, end: 43.99, label: "The file", anim: 10.5 },
   { start: 43.99, end: 60.08, label: "Score simulation", anim: 12.0 },
   { start: 60.08, end: 77.95, label: "Conditions first", anim: 15.5 },
-  { start: 77.95, end: 93.81, label: "Controlled funding", anim: 12.5 },
-  { start: 93.81, end: 103.03, label: "Rapid rescore", anim: 8.0 },
-  { start: 103.03, end: 113.3, label: "Refinance closes", anim: 7.5 },
-  { start: 113.3, end: 126.05, label: "Know the risk", anim: 8.0 },
-  { start: 126.05, end: 141.93, label: "Let’s talk", anim: 10.5 },
+  { start: 77.95, end: 97.18, label: "Controlled funding", anim: 15.2 },
+  { start: 97.18, end: 106.4, label: "Rapid rescore", anim: 8.0 },
+  { start: 106.4, end: 116.67, label: "Refinance closes", anim: 7.5 },
+  { start: 116.67, end: 129.42, label: "Know the risk", anim: 8.0 },
+  { start: 129.42, end: 145.3, label: "Let’s talk", anim: 10.5 },
 ];
 
 // The narration script. Captions, the SRT file and the voiceover all come from this list.
@@ -46,17 +46,17 @@ export const CAPTIONS = [
   { at: 60.48, text: "We don’t fund the bridge and hope the refinance works. We identify the remaining conditions first." },
   { at: 67.23, text: "The takeout lender has already accepted income, assets, employment, appraisal, and title." },
   { at: 73.59, text: "Only the middle score and the designated card payoffs remain." },
-  { at: 78.35, text: "Then EquiBridge funds a short-term, interest-only, closed-end second mortgage." },
-  { at: 84.03, text: "The $33,200 goes through escrow directly to the card companies." },
-  { at: 89.3, text: "No cash to the borrower. Every payoff documented." },
-  { at: 94.21, text: "The takeout lender submits proof of the new balances and requests a rapid rescore." },
-  { at: 99.72, text: "That typically takes about one to two weeks." },
-  { at: 103.43, text: "In this hypothetical example, the middle score updates to 668." },
-  { at: 108.47, text: "The refinance closes and pays off the EquiBridge second mortgage." },
-  { at: 113.7, text: "Conditional approval, score projections, and rapid rescoring don’t guarantee a refinance." },
-  { at: 119.83, text: "Every bridge loan must independently meet legal, underwriting, and repayment requirements." },
-  { at: 126.45, text: "EquiBridge Capital. Turning credit-constrained borrowers into refinance-ready opportunities." },
-  { at: 132.74, text: "Have a borrower who qualifies for everything except the credit score? Let’s see if EquiBridge can help." },
+  { at: 78.35, text: "Then EquiBridge funds a one-year, interest-only, closed-end second mortgage, with the balance due as a balloon payment at the end of the term." },
+  { at: 87.4, text: "The $33,200 goes through escrow directly to the card companies." },
+  { at: 92.67, text: "No cash to the borrower. Every payoff documented." },
+  { at: 97.58, text: "The takeout lender submits proof of the new balances and requests a rapid rescore." },
+  { at: 103.09, text: "That typically takes about one to two weeks." },
+  { at: 106.8, text: "In this hypothetical example, the middle score updates to 668." },
+  { at: 111.84, text: "The refinance closes and pays off the EquiBridge second mortgage." },
+  { at: 117.07, text: "Conditional approval, score projections, and rapid rescoring don’t guarantee a refinance." },
+  { at: 123.2, text: "Every bridge loan must independently meet legal, underwriting, and repayment requirements." },
+  { at: 129.82, text: "EquiBridge Capital. Turning credit-constrained borrowers into refinance-ready opportunities." },
+  { at: 136.11, text: "Have a borrower who qualifies for everything except the credit score? Let’s see if EquiBridge can help." },
 ];
 
 const ACCOUNTS = [
@@ -793,7 +793,7 @@ function S4({ t }: { t: number }) {
         h={140}
         dark
         title="EquiBridge Capital"
-        sub="Short-term, interest-only, closed-end second mortgage · 12 months or less"
+        sub="1-year, interest-only, closed-end second mortgage · balloon due at maturity"
         style={fade(t, 0.2)}
       />
       <Node x={740} y={130} w={420} h={140} title="Escrow" sub="Disburses directly to each designated creditor, per the approved payoff plan" style={fade(t, 2.4)} />
@@ -1028,7 +1028,7 @@ function Risk({ t }: { t: number }) {
     { title: "Score projection", text: "An estimate. Actual updated scores can come in lower." },
     { title: "Rapid rescore", text: "Timing and results depend on the bureaus and creditors." },
   ];
-  const facts = ["Short-term, interest-only second mortgage", "Term of 12 months or less", "Repayment risk evaluated on every loan"];
+  const facts = ["1-year, interest-only second mortgage", "Balloon payment due at the end of the term", "Repayment risk evaluated on every loan"];
   return (
     <>
       <Header t={t} a={0} eyebrow="Know the risk" title="None of these steps guarantees the refinance" />

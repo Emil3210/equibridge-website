@@ -83,7 +83,7 @@ export default function HomePage() {
               <ul className="checklist" style={{ fontSize: 15, lineHeight: 1.8 }}>
                 <li>Cards paid directly by EquiBridge</li>
                 <li>Takeout lender conditionally approves first</li>
-                <li>Fully amortizing if the refinance doesn’t close</li>
+                <li>1-year, interest-only term; balloon due at maturity</li>
               </ul>
             </div>
           </div>
