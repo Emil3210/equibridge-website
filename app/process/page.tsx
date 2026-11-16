@@ -194,7 +194,7 @@ export default function ProcessPage() {
 
       <section className="section section-mint">
         <div className="container stack" style={{ gap: 16, alignItems: "flex-start" }}>
-          <h2 className="h2">Send us two “almost” files.</h2>
+          <h2 className="h2">Send us your next “almost” file.</h2>
           <p className="lead">Include the 1003 and 1008, the credit report, and the takeout lender’s conditional approval.</p>
           <Link href="/submit-scenario" className="btn btn-primary">
             Submit a Scenario

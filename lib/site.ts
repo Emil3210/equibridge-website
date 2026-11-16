@@ -1,7 +1,7 @@
 // Edit company details in one place. Bracketed values are placeholders to fill in before launch.
 export const CONTACT = {
   email: "Emil@equibridgecapital.com",
-  phone: "[Phone number]",
+  phone: "949-372-8722",
   city: "Irvine, California",
   nmls: "[______]",
   states: "[states]",

@@ -884,9 +884,9 @@ function S10({ t }: { t: number }) {
               boxShadow: "0 10px 24px rgba(15,76,92,0.25)",
             }}
           >
-            Send us two “almost” files →
+            Send us your next “almost” file →
           </span>
-          <p style={{ fontSize: 18, color: C.muted, marginTop: 18 }}>equibridgecapital.com · Submit a Scenario</p>
+          <p style={{ fontSize: 18, color: C.muted, marginTop: 18 }}>equibridgecapital.com · Submit a Scenario · {CONTACT.phone}</p>
         </Abs>
         <p style={{ position: "absolute", left: 120, top: 486, width: 1040, textAlign: "center", fontSize: 13, lineHeight: 1.5, color: C.muted, ...fade(t, 11.4) }}>
           Hypothetical example with a fictional borrower. Not a commitment to lend. Score changes, conditional approvals and refinance closings
