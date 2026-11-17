@@ -15,7 +15,6 @@ export const metadata: Metadata = {
   },
   description:
     "A short-term second mortgage that pays off high card balances directly, so equity-rich homeowners can move to a better permanent loan. For brokers, lenders and their clients.",
-  icons: { icon: "/logo-mark.png" },
   openGraph: {
     title: "EquiBridge Capital",
     description: "Intelligent Lending. Greater Possibilities.",

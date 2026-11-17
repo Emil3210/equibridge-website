@@ -49,15 +49,15 @@ async function send(msg: { to: string; subject: string; html: string; text: stri
 }
 
 function layout(title: string, bodyHtml: string, footerHtml = "") {
-  return `<!doctype html><html><body style="margin:0;background:#f2f8fb;font-family:Arial,Helvetica,sans-serif;color:#2b2d42">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2f8fb;padding:24px 12px"><tr><td align="center">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border:1px solid #d5e3ea;border-radius:16px;overflow:hidden">
-<tr><td style="background:#0f4c5c;padding:20px 28px;color:#ffffff;font-size:20px;font-weight:bold">Equi<span style="color:#5bc0be">Bridge</span> <span style="font-size:12px;letter-spacing:3px;color:#5bc0be">CAPITAL</span></td></tr>
+  return `<!doctype html><html><body style="margin:0;background:#F5FBF8;font-family:Arial,Helvetica,sans-serif;color:#0F2742">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F5FBF8;padding:24px 12px"><tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border:1px solid #D3E8E0;border-radius:16px;overflow:hidden">
+<tr><td style="background:#0F2742;padding:18px 28px"><img src="https://equibridgecapital.com/logo-full-reverse.png" width="140" alt="EquiBridge Capital" style="display:block;width:140px;height:auto;border:0"></td></tr>
 <tr><td style="padding:28px">
-<h1 style="margin:0 0 16px;font-size:22px;color:#0f4c5c">${title}</h1>
+<h1 style="margin:0 0 16px;font-size:22px;color:#006D6B">${title}</h1>
 ${bodyHtml}
 </td></tr>
-<tr><td style="padding:18px 28px;background:#f2f8fb;font-size:12px;line-height:1.6;color:#56657a">${footerHtml}</td></tr>
+<tr><td style="padding:18px 28px;background:#F5FBF8;font-size:12px;line-height:1.6;color:#54647A">${footerHtml}</td></tr>
 </table></td></tr></table></body></html>`;
 }
 
@@ -65,7 +65,7 @@ function rows(pairs: [string, string][]) {
   return `<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;font-size:14px;border-collapse:collapse">${pairs
     .map(
       ([k, v]) =>
-        `<tr><td style="padding:7px 0;border-bottom:1px solid #e4f1f4;color:#56657a;width:45%">${esc(k)}</td><td style="padding:7px 0;border-bottom:1px solid #e4f1f4;font-weight:bold">${esc(v)}</td></tr>`,
+        `<tr><td style="padding:7px 0;border-bottom:1px solid #E4F6EE;color:#54647A;width:45%">${esc(k)}</td><td style="padding:7px 0;border-bottom:1px solid #E4F6EE;font-weight:bold">${esc(v)}</td></tr>`,
     )
     .join("")}</table>`;
 }
@@ -79,8 +79,8 @@ export async function sendInternalAlert(subject: string, summary: [string, strin
   if (!to) return;
   const html = layout(
     esc(subject),
-    `${rows(summary)}<p style="margin:20px 0 0"><a href="${SUPABASE_TABLES}" style="display:inline-block;background:#0f4c5c;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:bold">Open in Supabase</a></p>
-<p style="font-size:12px;color:#56657a;margin-top:16px">Borrower details and notes are only in Supabase, not in this email.</p>`,
+    `${rows(summary)}<p style="margin:20px 0 0"><a href="${SUPABASE_TABLES}" style="display:inline-block;background:#006D6B;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:bold">Open in Supabase</a></p>
+<p style="font-size:12px;color:#54647A;margin-top:16px">Borrower details and notes are only in Supabase, not in this email.</p>`,
     "Internal notification from equibridgecapital.com",
   );
   const text = `${subject}\n\n${summary.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\nOpen in Supabase: ${SUPABASE_TABLES}`;
@@ -102,7 +102,7 @@ export async function sendConfirmation(opts: {
 ${opts.paragraphs.map((p) => `<p style="font-size:15px;line-height:1.6;margin:0 0 14px">${esc(p)}</p>`).join("")}
 ${
   opts.cta
-    ? `<p style="margin:20px 0"><a href="${esc(opts.cta.href)}" style="display:inline-block;background:#0f4c5c;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:bold">${esc(opts.cta.label)}</a></p>`
+    ? `<p style="margin:20px 0"><a href="${esc(opts.cta.href)}" style="display:inline-block;background:#006D6B;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:bold">${esc(opts.cta.label)}</a></p>`
     : ""
 }
 <p style="font-size:15px;line-height:1.6;margin:0">Emil Yussuf<br>Founder, EquiBridge Capital</p>`,

@@ -69,10 +69,10 @@ export default function AudienceTabs({ initial }: { initial: View }) {
       <div className="card" style={{ marginTop: 40, padding: "28px 32px" }}>
         <div className="grid" style={{ gap: 20, gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
           {[
-            ["WEEK 0", "Scenario & pre-approval", "var(--teal-deep)"],
-            ["DAY 1 OF BRIDGE", "Close & pay off cards", "var(--teal)"],
-            ["WEEKS 1–3", "Balances report, rescore", "var(--aqua)"],
-            ["ABOUT WEEK 6", "Exit loan closes", "#9adbc9"],
+            ["WEEK 0", "Scenario & pre-approval", "var(--navy)"],
+            ["DAY 1 OF BRIDGE", "Close & pay off cards", "var(--teal-deep)"],
+            ["WEEKS 1–3", "Balances report, rescore", "var(--ocean)"],
+            ["ABOUT WEEK 6", "Exit loan closes", "var(--aqua)"],
           ].map(([when, what, color]) => (
             <div key={when} className="stack" style={{ gap: 6, borderTop: `4px solid ${color}`, paddingTop: 14 }}>
               <p style={{ fontSize: 13, fontWeight: 600, color: "var(--teal)" }}>{when}</p>

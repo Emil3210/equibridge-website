@@ -96,7 +96,7 @@ export default function SolutionsPage() {
               <li>Full income documentation and ability-to-repay review</li>
             </ul>
           </div>
-          <div className="card stack" style={{ flex: "1 1 380px", gap: 16, boxShadow: "0 12px 32px rgba(15,76,92,0.10)" }}>
+          <div className="card stack" style={{ flex: "1 1 380px", gap: 16, boxShadow: "0 12px 32px rgba(15,39,66,0.10)" }}>
             <h3 className="h3" style={{ color: "var(--teal-deep)" }}>
               At a glance
             </h3>

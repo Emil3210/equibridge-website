@@ -5,7 +5,7 @@ const base = (size = 40) => ({
   height: size,
   viewBox: "0 0 24 24",
   fill: "none",
-  stroke: "#1b6b73",
+  stroke: "#006D6B",
   strokeWidth: 1.8,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,

@@ -39,6 +39,7 @@ import {
   panel,
   pct,
   prog,
+  BrandLockup,
 } from "@/components/Explainer";
 import { CONTACT } from "@/lib/site";
 import { CAPTIONS, DURATION, SCENES } from "@/lib/process-video";
@@ -55,7 +56,7 @@ function Phase({ t, a, b, children }: { t: number; a: number; b?: number; childr
 
 function Dark({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, ${C.deep} 0%, ${C.teal} 70%, #227c84 100%)` }}>
+    <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, ${C.navy} 0%, #0B3F55 45%, ${C.deep} 100%)` }}>
       {children}
     </div>
   );
@@ -199,7 +200,7 @@ function S1({ t }: { t: number }) {
             ...panel,
             padding: "30px 44px",
             border: `2px solid ${C.warn}`,
-            boxShadow: "0 24px 60px rgba(15,76,92,0.18)",
+            boxShadow: "0 24px 60px rgba(15,39,66,0.18)",
             opacity: card,
             transform: `scale(${0.92 + 0.08 * card})`,
           }}
@@ -238,11 +239,8 @@ function S2({ t }: { t: number }) {
   const len = 900;
   return (
     <>
-      <div style={{ position: "absolute", left: 0, top: 50, width: 1280, display: "flex", justifyContent: "center", alignItems: "center", gap: 22, ...fade(t, 0.3, 0.8) }}>
-        <Image src="/logo-mark.png" alt="" width={174} height={60} loading="eager" />
-        <p style={{ fontFamily: H, fontSize: 42, fontWeight: 800, lineHeight: 1 }}>
-          Equi<span style={{ color: C.teal }}>Bridge</span> <span style={{ fontSize: 18, letterSpacing: 7, color: C.deep }}>CAPITAL</span>
-        </p>
+      <div style={{ position: "absolute", left: 0, top: 28, width: 1280, ...fade(t, 0.3, 0.8) }}>
+        <BrandLockup height={124} />
       </div>
       <svg width={1280} height={720} style={{ position: "absolute", inset: 0 }} aria-hidden="true">
         <path d={path} fill="none" stroke={C.aqua} strokeWidth={14} strokeLinecap="round" strokeDasharray={len} strokeDashoffset={len * (1 - arch)} />
@@ -383,7 +381,7 @@ function S4({ t }: { t: number }) {
             <p style={{ fontFamily: H, fontSize: 22, fontWeight: 700, letterSpacing: 4, textTransform: "uppercase", color: C.aqua, ...fade(t, 0.3) }}>
               What makes EquiBridge different
             </p>
-            <p style={{ fontFamily: H, fontSize: 30, fontWeight: 700, color: "#cfe9e8", marginTop: 30, ...fade(t, 2.6) }}>
+            <p style={{ fontFamily: H, fontSize: 30, fontWeight: 700, color: "#D2EEEA", marginTop: 30, ...fade(t, 2.6) }}>
               We don’t fund because a borrower has equity.
             </p>
             <p style={{ fontFamily: H, fontSize: 52, fontWeight: 800, lineHeight: 1.2, color: "#fff", marginTop: 26, ...fade(t, 5.6, 0.8) }}>
@@ -769,7 +767,7 @@ function S8({ t }: { t: number }) {
             justifyContent: "center",
             opacity: swap,
             transform: `translateX(${(1 - swap) * 80}px)`,
-            boxShadow: "0 18px 40px rgba(15,76,92,0.25)",
+            boxShadow: "0 18px 40px rgba(15,39,66,0.25)",
           }}
         >
           <div style={{ textAlign: "center" }}>
@@ -858,14 +856,8 @@ function S10({ t }: { t: number }) {
         ))}
       </Phase>
       <Phase t={t} a={8.8}>
-        <div style={{ position: "absolute", left: 0, top: 60, width: 1280, display: "flex", justifyContent: "center", alignItems: "center", gap: 24, ...fade(t, 8.8, 0.8) }}>
-          <Image src="/logo-mark.png" alt="" width={232} height={80} loading="eager" />
-          <div>
-            <p style={{ fontFamily: H, fontSize: 52, fontWeight: 800, lineHeight: 1 }}>
-              Equi<span style={{ color: C.teal }}>Bridge</span> <span style={{ fontSize: 22, letterSpacing: 8, color: C.deep }}>CAPITAL</span>
-            </p>
-            <p style={{ fontSize: 19, color: C.body, marginTop: 8 }}>Intelligent Lending. Greater Possibilities.</p>
-          </div>
+        <div style={{ position: "absolute", left: 0, top: 36, width: 1280, ...fade(t, 8.8, 0.8) }}>
+          <BrandLockup height={128} tagline />
         </div>
         <p style={{ position: "absolute", left: 60, top: 186, width: 1160, textAlign: "center", fontFamily: H, fontSize: 30, fontWeight: 800, color: C.teal, ...fade(t, 9.6) }}>
           Establish the exit first, then advance the bridge.
@@ -881,7 +873,7 @@ function S10({ t }: { t: number }) {
               fontFamily: H,
               fontSize: 24,
               fontWeight: 800,
-              boxShadow: "0 10px 24px rgba(15,76,92,0.25)",
+              boxShadow: "0 10px 24px rgba(15,39,66,0.25)",
             }}
           >
             Send us your next “almost” file →

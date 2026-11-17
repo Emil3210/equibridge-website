@@ -39,7 +39,7 @@ export default function WaitlistForm({
             fontSize: 15,
             padding: "12px 14px",
             borderRadius: 10,
-            border: "1px solid #b9cdd6",
+            border: "1px solid #B7D3CA",
           }}
         />
         <button

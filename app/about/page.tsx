@@ -34,7 +34,7 @@ export default function AboutPage() {
               src="/logo-full.png"
               alt="EquiBridge Capital logo: a cable-stayed bridge above the words EquiBridge Capital"
               width={380}
-              height={261}
+              height={242}
             />
           </div>
         </div>

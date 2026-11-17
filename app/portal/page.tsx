@@ -45,7 +45,7 @@ export default function PortalPage() {
           </div>
         </div>
 
-        <div className="card stack" style={{ flex: "1 1 380px", gap: 16, boxShadow: "0 20px 48px rgba(15,76,92,0.12)" }}>
+        <div className="card stack" style={{ flex: "1 1 380px", gap: 16, boxShadow: "0 20px 48px rgba(15,39,66,0.12)" }}>
           <LockIcon />
           <h2 style={{ fontSize: 22, fontWeight: 700 }}>Get early access</h2>
           <p className="body" style={{ fontSize: 15 }}>

@@ -79,13 +79,7 @@ export default function Header() {
     <header className="site-header">
       <div className="container">
         <Link href="/" className="brand" aria-label="EquiBridge Capital home">
-          <Image src="/logo-mark.png" alt="" width={116} height={40} priority />
-          <span className="wordmark">
-            <span className="wordmark-main">
-              Equi<span className="accent">Bridge</span>
-            </span>
-            <span className="wordmark-sub">CAPITAL</span>
-          </span>
+          <Image src="/logo-full.png" alt="EquiBridge Capital" width={1200} height={765} priority />
         </Link>
 
         <nav className="main-nav" aria-label="Main">

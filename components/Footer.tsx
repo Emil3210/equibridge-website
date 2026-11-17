@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CONTACT } from "@/lib/site";
 
@@ -7,11 +8,8 @@ export default function Footer() {
       <div className="container">
         <div className="footer-cols">
           <div style={{ flex: "1 1 260px" }}>
-            <p style={{ fontFamily: "var(--font-heading)", fontSize: 24, fontWeight: 800, color: "#fff" }}>
-              Equi<span style={{ color: "var(--aqua)" }}>Bridge</span>{" "}
-              <span style={{ fontSize: 13, letterSpacing: 4, color: "var(--aqua)" }}>CAPITAL</span>
-            </p>
-            <p style={{ marginTop: 10 }}>Intelligent Lending. Greater Possibilities.</p>
+            <Image src="/logo-full-reverse.png" alt="EquiBridge Capital" width={1200} height={765} className="footer-logo" />
+            <p style={{ marginTop: 14, fontFamily: "var(--font-heading)", fontWeight: 600, letterSpacing: 1.5, fontSize: 13, textTransform: "uppercase", color: "#fff" }}>Intelligent Lending. Greater Possibilities.</p>
           </div>
           <div>
             <h3>Solutions</h3>

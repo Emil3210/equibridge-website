@@ -34,7 +34,7 @@ export default async function HowItWorksPage({
           playsInline
           preload="metadata"
           poster="/videos/equibridge-explainer-poster.jpg"
-          style={{ width: "100%", aspectRatio: "16 / 9", borderRadius: 16, background: "#0f4c5c", boxShadow: "0 12px 32px rgba(15,76,92,0.12)" }}
+          style={{ width: "100%", aspectRatio: "16 / 9", borderRadius: 16, background: "#0F2742", boxShadow: "0 12px 32px rgba(15,39,66,0.12)" }}
         >
           <source src="/videos/equibridge-explainer.mp4" type="video/mp4" />
           Your browser can’t play this video. <a href="/videos/equibridge-explainer.mp4">Download it here</a>.

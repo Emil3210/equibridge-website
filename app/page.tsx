@@ -46,7 +46,7 @@ export default function HomePage() {
           <div style={{ flex: "1 1 420px", display: "flex", justifyContent: "center" }}>
             <div
               className="card stack"
-              style={{ width: "100%", maxWidth: 460, gap: 22, boxShadow: "0 20px 48px rgba(15,76,92,0.14)" }}
+              style={{ width: "100%", maxWidth: 460, gap: 22, boxShadow: "0 20px 48px rgba(15,39,66,0.14)" }}
             >
               <div className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
                 <h2 className="h3" style={{ color: "var(--teal-deep)" }}>

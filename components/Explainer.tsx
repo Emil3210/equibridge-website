@@ -72,22 +72,40 @@ export const REASON = "Proportion of balances to credit limits is too high";
 
 // ---------- Helpers ----------
 export const C = {
-  navy: "#2b2d42",
-  deep: "#0f4c5c",
-  teal: "#1b6b73",
-  aqua: "#5bc0be",
-  mint: "#d8f3dc",
-  bg: "#f2f8fb",
-  tint: "#e4f1f4",
-  line: "#d5e3ea",
-  body: "#4a5568",
-  muted: "#56657a",
+  ocean: "#0FA5A0",
+  navy: "#0F2742",
+  deep: "#006D6B",
+  teal: "#006D6B",
+  aqua: "#38D3C4",
+  mint: "#D8F7E4",
+  bg: "#F5FBF8",
+  tint: "#E4F6EE",
+  line: "#D3E8E0",
+  body: "#3E4C5E",
+  muted: "#54647A",
   warn: "#b93d0b",
   warnBg: "#fdeee4",
   ok: "#17714a",
   okBg: "#e3f5ea",
 };
 export const H = "var(--font-heading)";
+
+// Emil's EquiBridge Capital logo (stacked: bridge over wordmark), optionally with the tagline beside it.
+export function BrandLockup({ height, tagline = false }: { height: number; tagline?: boolean }) {
+  const w = Math.round(height * 1.569);
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 32 }}>
+      <Image src="/logo-full.png" alt="EquiBridge Capital" width={w} height={height} loading="eager" />
+      {tagline ? (
+        <p style={{ borderLeft: `3px solid ${C.aqua}`, paddingLeft: 28, fontFamily: H, fontSize: 21, fontWeight: 700, letterSpacing: 2.5, lineHeight: 1.5, color: C.navy, textTransform: "uppercase" }}>
+          Intelligent Lending.
+          <br />
+          <span style={{ color: C.deep }}>Greater Possibilities.</span>
+        </p>
+      ) : null}
+    </div>
+  );
+}
 export const LIMIT_TOTAL = ACCOUNTS.reduce((s, a) => s + a.limit, 0);
 export const PAYOFF = ACCOUNTS.reduce((s, a) => s + (a.bal - a.target), 0);
 
@@ -109,7 +127,7 @@ export const panel: React.CSSProperties = {
   border: `1px solid ${C.line}`,
   borderRadius: 20,
   padding: 28,
-  boxShadow: "0 12px 32px rgba(15,76,92,0.08)",
+  boxShadow: "0 12px 32px rgba(15,39,66,0.08)",
 };
 
 export function Abs({
@@ -244,7 +262,7 @@ export function Node({
       }}
     >
       <p style={{ fontFamily: H, fontSize: 20, fontWeight: 800, color: dark ? "#fff" : C.navy }}>{title}</p>
-      {sub ? <div style={{ fontSize: 15, lineHeight: 1.45, marginTop: 6, color: dark ? "#cfe9e8" : C.body }}>{sub}</div> : null}
+      {sub ? <div style={{ fontSize: 15, lineHeight: 1.45, marginTop: 6, color: dark ? "#D2EEEA" : C.body }}>{sub}</div> : null}
     </Abs>
   );
 }
@@ -405,7 +423,7 @@ function Hook({ t }: { t: number }) {
             ...panel,
             padding: "30px 44px",
             border: `2px solid ${C.warn}`,
-            boxShadow: "0 24px 60px rgba(15,76,92,0.18)",
+            boxShadow: "0 24px 60px rgba(15,39,66,0.18)",
             opacity: card,
             transform: `scale(${0.92 + 0.08 * card})`,
           }}
@@ -443,7 +461,7 @@ function Hook({ t }: { t: number }) {
           style={{
             position: "absolute",
             inset: 0,
-            background: `linear-gradient(135deg, ${C.deep} 0%, ${C.teal} 70%, #227c84 100%)`,
+            background: `linear-gradient(135deg, ${C.navy} 0%, #0B3F55 45%, ${C.deep} 100%)`,
             clipPath: `inset(0 0 0 ${(1 - wipe) * 100}%)`,
           }}
         >
@@ -700,7 +718,7 @@ function S3({ t }: { t: number }) {
             style={{
               ...fade(t, f.a),
               ...(last && !unlocked ? { border: `2px dashed ${C.teal}` } : {}),
-              ...(last && unlocked ? { boxShadow: `0 0 0 6px ${C.mint}, 0 12px 32px rgba(15,76,92,0.18)` } : {}),
+              ...(last && unlocked ? { boxShadow: `0 0 0 6px ${C.mint}, 0 12px 32px rgba(15,39,66,0.18)` } : {}),
             }}
           />
         );
@@ -1066,15 +1084,8 @@ function Risk({ t }: { t: number }) {
 function Close({ t }: { t: number }) {
   return (
     <>
-      <div style={{ position: "absolute", left: 0, top: 70, width: 1280, display: "flex", justifyContent: "center", alignItems: "center", gap: 24, ...fade(t, 0.1, 0.8) }}>
-        <Image src="/logo-mark.png" alt="" width={232} height={80} loading="eager" />
-        <div>
-          <p style={{ fontFamily: H, fontSize: 52, fontWeight: 800, lineHeight: 1 }}>
-            Equi<span style={{ color: C.teal }}>Bridge</span>{" "}
-            <span style={{ fontSize: 22, letterSpacing: 8, color: C.deep }}>CAPITAL</span>
-          </p>
-          <p style={{ fontSize: 19, color: C.body, marginTop: 8 }}>Intelligent Lending. Greater Possibilities.</p>
-        </div>
+      <div style={{ position: "absolute", left: 0, top: 40, width: 1280, ...fade(t, 0.1, 0.8) }}>
+        <BrandLockup height={136} tagline />
       </div>
       <p style={{ position: "absolute", left: 60, top: 196, width: 1160, textAlign: "center", fontFamily: H, fontSize: 27, fontWeight: 800, color: C.teal, ...fade(t, 1.4) }}>
         Turning credit-constrained borrowers into refinance-ready opportunities.
@@ -1094,7 +1105,7 @@ function Close({ t }: { t: number }) {
               fontFamily: H,
               fontSize: 22,
               fontWeight: 800,
-              boxShadow: "0 10px 24px rgba(15,76,92,0.25)",
+              boxShadow: "0 10px 24px rgba(15,39,66,0.25)",
             }}
           >
             Let’s see if EquiBridge can help →
